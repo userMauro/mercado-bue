@@ -1,0 +1,15 @@
+# x ✔      TAREAS      ✔ x #
+
+[ x ] Login:
+    [ x ] Registrarse:
+        [ x ] registrarse con email y contraseña
+        [ x ] recibir email de confirmación
+        [ x ] al clickear en el email de confirmación, setear un username (unico), recién ahí se crea el usuario en la base de datos
+        [ x ] enviarlos al "home" donde eligen "comprar" o "vender"
+            [ x ] otorgarle un token JWT
+
+    [ x ] Loguearse:
+        [ x ] ingresar con usuario/email y contraseña
+        [ x ] ok: enviarlos al "home" donde eligen "comprar" o "vender"
+            [ x ] otorgarle un token JWT
+        [ x ] not-ok: mensaje error de credenciales
