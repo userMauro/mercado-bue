@@ -171,41 +171,4 @@ const resetPassword = async(req, res, next) => {
     }
 }
 
-// login con Google
-// const getUser = async (req, res, next) => {
-//     const { email } = req.params;
-//     try {
-//       let user = await User.find({ email: email });
-//       if (user.length === 0) {
-//         return res.json({ message: "Not register user" });
-//       }
-//       if (user) {
-//         const { _id, username, email, role } = user[0]
-//         const dataToken = {
-//           id: _id,
-//           username: username,
-//           email: email,
-//         };
-//         const token = jwt.sign(dataToken, process.env.SECRET, {
-//           expiresIn: 60 * 60 * 1 * 1, // expira cada 7 días (segs, mins, horas, dias)
-//         });
-         
-//         const userData = {
-//           username: username,
-//           email: email,
-//           role: role,
-//           token,
-//         };
-//         return res.send({
-//           status: "SUCCESS",
-//           message: "Signup successfully",
-//           data: userData,
-//         });
-//       }
-//     } catch (e) {
-//       res.status(404).send(e.message);
-//     }
-// };
-
-
 module.exports = { preRegister, register, login, authOK, resetPassword };
