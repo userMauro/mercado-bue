@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
 const { validate } = require('./regex')
+const { sendEmail } = require('../email/nodemailer')
 
 const preRegister = async (req, res, next) => {
     try {
@@ -20,9 +21,8 @@ const preRegister = async (req, res, next) => {
         const emails = await User.find({email})
         if (emails.length > 0) return res.status(400).json({status: 'failed', msg: 'email already exists'})
 
-        return res.status(200).json({status: 'success', msg: `we send an email to ${email} to continue the registration`})
-
-        // > > > enviar email de confirmacion
+        const mail = {email, type: 'verifyEmail'}
+        await sendEmail(mail, res, next)
     } catch (error) {
         return next(error)
     }
