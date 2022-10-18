@@ -4,15 +4,15 @@ BACKEND
     [ x ] Auth:
         [ x ] Registrarse:
             [ x ] preregistrarse mandando un mail al email ingresado
-                [ x ] fail: email ya en uso
+                [ ✔ ] fail: email inválido o inexistente, input vacío
                 [ x ] success: enviarle link al mail para registrarse con username/password
-            [ x ] confirmar registro, creando un username/password
-                [ x ] fail: username/password inválidos o existentes, inputs vacíos
+            [ ✔ ] confirmar registro, creando un username/password
+                [ ✔ ] fail: username/password inválidos o existentes, inputs vacíos
                 [ ✔ ] success: crear usuario en la db
 
         [ ✔ ] Loguearse:
             [ ✔ ] ingresar con email y password
-                [ ✔ ] fail: email/password inválidos
+                [ ✔ ] fail: email/password inválidos, sesión abierta
                 [ ✔ ] success: otorgarle JWT token
 
         [ x ] Reset password:
