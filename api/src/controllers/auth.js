@@ -9,13 +9,18 @@ const preRegister = async (req, res, next) => {
 
         if (!email) return res.status(400).json({status: 'failed', msg: 'email input is empty'})
 
-         // chequeo no repetir email
-         const emails = await User.find({email})
-         if (emails.length > 0) return res.status(400).json({status: 'failed', msg: 'email already exists'})
+        // regex para email
+        if (!validate(email, 'email')) {
+            return res.status(401).json({status: 'failed', msg: 'invalid characters in email'})
+        }
 
-         return res.status(200).json({status: 'success', msg: `we send an email to ${email} to continue the registration`})
+        // chequeo no repetir email
+        const emails = await User.find({email})
+        if (emails.length > 0) return res.status(400).json({status: 'failed', msg: 'email already exists'})
 
-         // > > > enviar email de confirmacion
+        return res.status(200).json({status: 'success', msg: `we send an email to ${email} to continue the registration`})
+
+        // > > > enviar email de confirmacion
     } catch (error) {
         return next(error)
     }
@@ -24,6 +29,11 @@ const preRegister = async (req, res, next) => {
 const register = async (req, res, next) => {
     try {
         const { username, password, email } = req.body
+
+        // regex para email/username
+        if (!validate(email, 'email') || (!validate(username, 'username')))  {
+            return res.status(401).json({status: 'failed', msg: 'invalid characters in email/username'})
+        }
 
         // chequeo no repetir username/email
         const users = await User.find({username})
@@ -57,11 +67,16 @@ const register = async (req, res, next) => {
     } catch (error) {
         return next(error)
     };
-};
+}
 
 const login = async (req, res, next) => {
     try {
-        let { username, password } = req.body;
+        let { email, password } = req.body;
+
+        // regex para email
+        if (!validate(email, 'email')) {
+            return res.status(401).json({status: 'failed', msg: 'invalid characters in email'})
+        }
 
         // reviso si ya está logueado
         const logged = req.get('authorization');
@@ -69,13 +84,13 @@ const login = async (req, res, next) => {
             return res.status(401).json({status: 'failed', msg: 'there is an account already logged in'})
         }
 
-        const user = await User.findOne({ username });
+        const user = await User.findOne({ email });
     
         const passwordCorrect = (user === null) 
             ? false
             : await bcrypt.compare(password, user.passwordHash)
         
-        if (!passwordCorrect) return res.status(401).json({status: 'failed', msg: 'invalid username/email'})
+        if (!passwordCorrect) return res.status(401).json({status: 'failed', msg: 'invalid email/password'})
 
         // si logueo bien, agrego la data que va a ir en el token codificado
         const data = {
@@ -94,7 +109,7 @@ const login = async (req, res, next) => {
     } catch (error) {
         return next(error);
     };
-};
+}
 
 const authOK = async (req, res, next) => {
     // agregar esta funcion a rutas donde solo quiero que ingresen solo usuarios logueados
@@ -122,7 +137,7 @@ const authOK = async (req, res, next) => {
     } catch (error) {
         return next(error);
     };
-};
+}
 
 const resetPassword = async(req, res, next) => {
     try {
@@ -152,7 +167,22 @@ const resetPassword = async(req, res, next) => {
     } catch (error) {
         return next(error);
     }
-};
+}
+
+const validate = (data, type) => {
+    // (/^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/, "gm")
+    try {
+        if (type === 'email') {
+            const emailRegex = new RegExp(/^[A-Za-z0-9_.-]+@[A-Za-z0-9.-]+$/, "gm")
+            return emailRegex.test(data)
+        } else if (type === 'username') {
+            const usernameRegex = new RegExp(/^[A-Za-z0-9_!#$%&.-]+$/, "gm")
+            return usernameRegex.test(data)
+        }
+    } catch (error) {
+        return next(error)
+    }
+}
 
 // login con Google
 // const getUser = async (req, res, next) => {
