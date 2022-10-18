@@ -1,6 +1,12 @@
+
+// ####################################
+// ###### USELESS FOR THE MOMENT ######
+// ####################################
+
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 
 const { 
     FB_API_KEY,
@@ -23,3 +29,34 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
+
+// Initialize Firebase Authentication and get a reference to the service
+const auth = getAuth(app);
+
+const emailVerify = async() => {
+    let actionCodeSettings = {
+        url: 'https://www.example.com/?email=' + firebase.auth().currentUser.email,
+        iOS: {
+          bundleId: 'com.example.ios'
+        },
+        android: {
+          packageName: 'com.example.android',
+          installApp: true,
+          minimumVersion: '12'
+        },
+        handleCodeInApp: true,
+        dynamicLinkDomain: "example.page.link"
+    };
+    
+    firebase.auth().currentUser.sendEmailVerification(actionCodeSettings)
+        .then(function() {
+            // Verification email sent.
+            console.log('\u2705 email sent with Firebase to: ', firebase.auth().currentUser.email)
+        })
+        .catch(function(error) {
+            // Error occurred. Inspect error.code.
+            console.log('\u274C error at Firebase:', error)
+        });
+}
+
+module.exports = { emailVerify }
