@@ -13,3 +13,7 @@
         [ x ] ok: enviarlos al "home" donde eligen "comprar" o "vender"
             [ x ] otorgarle un token JWT
         [ x ] not-ok: mensaje error de credenciales
+
+    [ x ] Reset password:
+        [ x ] 'olvidaste tu contraseña?' y que te mande un mail de confirmación
+        [ x ] al confirmar, te cambia la contraseña a una random, para que la cambies desde adentro
