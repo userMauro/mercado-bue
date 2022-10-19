@@ -1,31 +1,10 @@
 const nodemailer = require("nodemailer");
 
 const { NODEMAILER_USER, AUTH_ID_CLIENT, AUTH_SECRET_CLIENT } = process.env
-const token = require('../email/token.json')
 const { getGoogleAuth } = require('./oauth')
 
-const message = {
-    verifyEmail: {
-        subject: 'Confirmar email en Mercado Bue!',
-        text: '',
-        html: '<p>Hola, somos Mercado Bue! Visita el siguiente link para confirmar tu email:</p><button>Confirmar email</button>'
-    },
-    welcomeEmail: {
-        subject: 'Bienvenida/o a la comunidad de Mercado Bue!',
-        text: '',
-        html: '<p>Hola! Antes de empezar a comprar o vender, te aconsejamos que leas nuestros tips: TIPS</p>'
-    },
-    confirmPasswordReset: {
-        subject: 'Recuperar contraseña Mercado Bue!',
-        text: '',
-        html: '<p>Iniciaste un pedido para recuperar tu contraseña, presiona confirmar si deseas restablecerla.</p><button>Confirmar</button>'
-    },
-    resetPassword: {
-        subject: 'Contraseña provisoria Mercado Bue!',
-        text: '',
-        html: '<p>Esta es tu contraseña provisoria, vence en 30 minutos, ingresa a tu cuenta para cambiarla</p>'
-    },
-}
+const token = require('./token.json')
+const { message } = require('./messages.json')
 
 const callTransporter = async(data, res, next) => {
     try {

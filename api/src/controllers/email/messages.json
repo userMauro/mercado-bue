@@ -1,0 +1,24 @@
+{ 
+    "message" : {
+        "verifyEmail": {
+            "subject": "Confirmar email en Mercado Bue!",
+            "text": "",
+            "html": "<p>Hola, somos Mercado Bue! Visita el siguiente link para confirmar tu email:</p><button>Confirmar email</button>"
+        },
+        "welcomeEmail": {
+            "subject": "Bienvenida/o a la comunidad de Mercado Bue!",
+            "text": "",
+            "html": "<p>Hola! Antes de empezar a comprar o vender, te aconsejamos que leas nuestros tips: TIPS</p>"
+        },
+        "confirmPasswordReset": {
+            "subject": "Recuperar contraseña Mercado Bue!",
+            "text": "",
+            "html": "<p>Iniciaste un pedido para recuperar tu contraseña, presiona confirmar si deseas restablecerla.</p><button>Confirmar</button>"
+        },
+        "resetPassword": {
+            "subject": "Contraseña provisoria Mercado Bue!",
+            "text": "",
+            "html": "<p>Esta es tu contraseña provisoria, vence en 30 minutos, ingresa a tu cuenta para cambiarla</p>"
+        }
+    }
+}
