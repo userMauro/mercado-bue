@@ -27,13 +27,12 @@ const message = {
     },
 }
 
-const sendEmail = async (req, res, next) => {
+const callTransporter = async(data, res, next) => {
     try {
-        const { email, type } = req;
+        const { email, html, type } = data
 
         await getGoogleAuth()
 
-        // espero 3 segundos para obtener de forma segura el accessToken de OAuth2
         setTimeout(() => {
             const transporter = nodemailer.createTransport({
                 service: 'gmail',
@@ -45,20 +44,20 @@ const sendEmail = async (req, res, next) => {
                     refreshToken: token.accessToken
                 }
             })
-    
+
             let emailDetail = {
                 from: NODEMAILER_USER,
                 to: email,
                 subject: message[type].subject,
                 text: message[type].text,
-                html: message[type].html
+                html
             }
-    
+
             transporter.sendMail(emailDetail, (error) => {
                 if (error) {
                     return res.status(404).json({status: 'failed', msg: error.message})
                 } else {
-                    return res.status(200).json({status: 'success', msg: `email sent successfully to ${email}, check it for more information`})
+                    return res.status(200).json({status: 'success', msg: `email sent successfully to ${emailDetail.to}, check it for more information`})
                 }
             })
         }, 3000)
@@ -67,41 +66,21 @@ const sendEmail = async (req, res, next) => {
     }
 }
 
+const sendEmail = async (req, res, next) => {
+    try {
+        req.html = message[req.type].html
+        await callTransporter(req, res, next)
+    } catch (error) {
+        next(error)
+    }
+}
+
 const sendEmailNewPassword = async (req, res, next) => {
     try {
-        const { email, type, password } = req;
+        const { type, password } = req;
 
-        await getGoogleAuth()
-
-        // espero 3 segundos para obtener de forma segura el accessToken de OAuth2
-        setTimeout(() => {
-            const transporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    type: 'OAuth2',
-                    user: NODEMAILER_USER,
-                    clientId: AUTH_ID_CLIENT,
-                    clientSecret: AUTH_SECRET_CLIENT,
-                    refreshToken: token.accessToken
-                }
-            })
-    
-            let emailDetail = {
-                from: NODEMAILER_USER,
-                to: email,
-                subject: message[type].subject,
-                text: message[type].text,
-                html: `${message[type].html} <h1>${password}</h1>`
-            }
-    
-            transporter.sendMail(emailDetail, (error) => {
-                if (error) {
-                    return res.status(404).json({status: 'failed', msg: error.message})
-                } else {
-                    return res.status(200).json({status: 'success', msg: `we send the temporary password to ${email}`})
-                }
-            })
-        }, 3000)
+        req.html = `${message[type].html} <h1>${password}</h1>`
+        await callTransporter(req, res, next)
     } catch (error) {
         next(error)
     }

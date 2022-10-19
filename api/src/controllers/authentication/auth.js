@@ -46,10 +46,10 @@ const preRegister = async (req, res, next) => {
 
         // chequeo no repetir email
         const exists = await User.findOne({email})
-        if (!exists) return res.status(400).json({status: 'failed', msg: 'email already exists'})
+        if (exists) return res.status(400).json({status: 'failed', msg: 'email already exists'})
 
-        const mail = {email, type: 'verifyEmail'}
-        await sendEmail(mail, res, next)
+        const data = {email, type: 'verifyEmail'}
+        await sendEmail(data, res, next)
     } catch (error) {
         return next(error)
     }
@@ -66,7 +66,7 @@ const register = async (req, res, next) => {
 
         // chequeo no repetir email
         const exists = await User.findOne({email})
-        if (!exists) return res.status(401).json({status: 'failed', msg: 'email already in use'})
+        if (exists) return res.status(401).json({status: 'failed', msg: 'email already in use'})
 
 
         // hash passwd
@@ -85,8 +85,8 @@ const register = async (req, res, next) => {
 
         await user.save()
 
-        const mail = {email, type: 'welcomeEmail'}
-        await sendEmail(mail, res, next) 
+        const data = {email, type: 'welcomeEmail'}
+        await sendEmail(data, res, next) 
     } catch (error) {
         return next(error)
     };
@@ -147,8 +147,8 @@ const confirmPasswordReset = async(req, res, next) => {
         const exists = await User.findOne({email})
         if (!exists) return res.status(401).json({status: 'failed', msg: 'email not founded in database'})
 
-        const mail = {email, type: 'confirmPasswordReset'}
-        await sendEmail(mail, res, next)
+        const data = {email, type: 'confirmPasswordReset'}
+        await sendEmail(data, res, next)
     } catch (error) {
         next(error)
     }
@@ -176,8 +176,8 @@ const resetPassword = async(req, res, next) => {
         user.passwordHash = passwordHash
         user.save()
 
-        const mail = {email, type: 'resetPassword', password}
-        await sendEmailNewPassword(mail, res, next)
+        const data = {email, type: 'resetPassword', password}
+        await sendEmailNewPassword(data, res, next)
     } catch (error) {
         return next(error);
     }
