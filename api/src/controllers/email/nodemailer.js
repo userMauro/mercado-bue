@@ -16,8 +16,6 @@ const sendEmail = async (req, res, next) => {
         const { email, type } = req;
 
         await getGoogleAuth()
-        // setTimeout(() => console.log(token.accessToken), 5000)
-        // console.log('token json:', token.accessToken)
 
         // espero 3 segundos para obtener de forma segura el accessToken de OAuth2
         setTimeout(() => {
