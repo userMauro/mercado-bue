@@ -1,10 +1,11 @@
 const authRouter = require('express').Router()
 
-const { register, login, resetPassword, preRegister } = require('../controllers/authentication/auth')
+const { register, login, resetPassword, preRegister, confirmPasswordReset } = require('../controllers/authentication/auth')
 
-authRouter.get('/preRegister', preRegister)
+authRouter.get('/register', preRegister)
+authRouter.post('/register/confirm', register)
 authRouter.post('/login', login)
-authRouter.post('/register', register)
-authRouter.put('/resetPassword', resetPassword)
+authRouter.get('/resetPass', confirmPasswordReset)
+authRouter.put('/resetPass/confirm', resetPassword)
 
 module.exports = authRouter

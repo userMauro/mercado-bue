@@ -2,15 +2,42 @@ const User = require('../../models/User')
 
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const { v4: uuidv4 } = require('uuid')
 
 const { validate } = require('./regex')
-const { sendEmail } = require('../email/nodemailer')
+const { sendEmail, sendEmailNewPassword } = require('../email/nodemailer')
+
+const authOK = async (req, res, next) => {
+    // agregar esta funcion a rutas donde solo quiero que ingresen solo usuarios logueados
+    
+    try {
+        const auth = req.get('authorization');     // recupera la cabecera http 'authorization' (es de express)
+
+        let token = null;
+
+        // la cabecera sería algo asi: 'Bearer kjgalksdkglahsdalk'
+        if (auth && auth.toLowerCase().startsWith('bearer')) {
+            token = auth.substring(7);
+        };
+
+        let decodedToken = {};
+        try {
+            decodedToken = jwt.verify(token, process.env.SECRET);
+        } catch {};
+
+        if (!token || !decodedToken.id) {
+            return res.status(401).json({status: 'failed', msg: 'token missing or invalid'});
+        };
+
+        next();
+    } catch (error) {
+        return next(error);
+    };
+}
 
 const preRegister = async (req, res, next) => {
     try {
         const { email } = req.body
-
-        if (!email) return res.status(400).json({status: 'failed', msg: 'email input is empty'})
 
         // regex para email
         if (!validate(email, 'email')) {
@@ -18,8 +45,8 @@ const preRegister = async (req, res, next) => {
         }
 
         // chequeo no repetir email
-        const emails = await User.find({email})
-        if (emails.length > 0) return res.status(400).json({status: 'failed', msg: 'email already exists'})
+        const exists = await User.findOne({email})
+        if (!exists) return res.status(400).json({status: 'failed', msg: 'email already exists'})
 
         const mail = {email, type: 'verifyEmail'}
         await sendEmail(mail, res, next)
@@ -37,11 +64,10 @@ const register = async (req, res, next) => {
             return res.status(401).json({status: 'failed', msg: 'invalid characters in email/username'})
         }
 
-        // chequeo no repetir username/email
-        const users = await User.find({username})
-        if (users.length > 0) return res.status(400).json({status: 'failed', msg: 'username already exists'})
-        const emails = await User.find({email})
-        if (emails.length > 0) return res.status(400).json({status: 'failed', msg: 'email already in use'})
+        // chequeo no repetir email
+        const exists = await User.findOne({email})
+        if (!exists) return res.status(401).json({status: 'failed', msg: 'email already in use'})
+
 
         // hash passwd
             const saltRounds = 10
@@ -57,15 +83,10 @@ const register = async (req, res, next) => {
             reports: [],
         })
 
-        let userSaved = await user.save()
-        
-        if (userSaved) {
-            console.log(`\u2705 user "${username}" registered and saved OK`)
-            return res.json({status: 'success', msg: userSaved})
-        } else {
-            console.log(`\u274C user "${username}" cannot be saved, ERROR`)
-            return res.status(400).json({status: 'failed', msg: 'error while saving user'})
-        }
+        await user.save()
+
+        const mail = {email, type: 'welcomeEmail'}
+        await sendEmail(mail, res, next) 
     } catch (error) {
         return next(error)
     };
@@ -113,62 +134,53 @@ const login = async (req, res, next) => {
     };
 }
 
-const authOK = async (req, res, next) => {
-    // agregar esta funcion a rutas donde solo quiero que ingresen solo usuarios logueados
-    
+const confirmPasswordReset = async(req, res, next) => {
     try {
-        const auth = req.get('authorization');     // recupera la cabecera http 'authorization' (es de express)
+        const { email } = req.body
 
-        let token = null;
+        // regex para email
+        if (!validate(email, 'email')) {
+            return res.status(401).json({status: 'failed', msg: 'invalid characters in email'})
+        }
 
-        // la cabecera sería algo asi: 'Bearer kjgalksdkglahsdalk'
-        if (auth && auth.toLowerCase().startsWith('bearer')) {
-            token = auth.substring(7);
-        };
+        // chequeo encontrar mail
+        const exists = await User.findOne({email})
+        if (!exists) return res.status(401).json({status: 'failed', msg: 'email not founded in database'})
 
-        let decodedToken = {};
-        try {
-            decodedToken = jwt.verify(token, process.env.SECRET);
-        } catch {};
-
-        if (!token || !decodedToken.id) {
-            return res.status(401).json({status: 'failed', msg: 'token missing or invalid'});
-        };
-
-        next();
+        const mail = {email, type: 'confirmPasswordReset'}
+        await sendEmail(mail, res, next)
     } catch (error) {
-        return next(error);
-    };
+        next(error)
+    }
 }
 
 const resetPassword = async(req, res, next) => {
     try {
-        const { email } = req.body;
-        const user = await User.findOne({email});
+        const { email } = req.body
 
-        if (!user) return res.status(401).json({status: 'failed', msg: 'email invalid'});
+        // regex para email
+        if (!validate(email, 'email')) {
+            return res.status(401).json({status: 'failed', msg: 'invalid characters in email'})
+        }
 
-        // enviar email y lo de abajo hacer en la confirmacion
-        // ###################################################
+        // chequeo encontrar mail
+        const user = await User.findOne({email})
+        if (!user) return res.status(401).json({status: 'failed', msg: 'email not founded in database'})
 
-        const newPassword = uuidv4();
+        const password = uuidv4().slice(0, 13)
 
         // hash passwd
-            const saltRounds = 10;
-            const passwordHash = await bcrypt.hash(newPassword, saltRounds);
+            const saltRounds = 10
+            const passwordHash = await bcrypt.hash(password, saltRounds)
 
-        user.passwordHash = passwordHash;
-        user.save();
+        user.passwordHash = passwordHash
+        user.save()
 
-        // const message = `For security policies we reset your Astronet password. You can change to the password you want in the modify user section of our app. Greetings from Astronet! The new password is " ${newPassword} "`;
-        // const payload = { body: { userMail, message }};
-
-        // await sendEmail(payload);
-
-        return res.json({status: 'success', msg: 'password reset'})
+        const mail = {email, type: 'resetPassword', password}
+        await sendEmailNewPassword(mail, res, next)
     } catch (error) {
         return next(error);
     }
 }
 
-module.exports = { preRegister, register, login, authOK, resetPassword };
+module.exports = { preRegister, register, login, authOK, confirmPasswordReset, resetPassword };

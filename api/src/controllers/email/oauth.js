@@ -14,12 +14,8 @@ const getGoogleAuth = async() => {
 
     authClient.getAccessToken((err, refreshToken) => {
         if (err) return console.log(err)
-
-        // solo queda devolver este token y usarlo con nodemailer
-        token.accessToken = refreshToken
+        token.accessToken = refreshToken    // json
     })
-
-    // setTimeout(() => console.log(a), 10000)
 }
 
 module.exports = { getGoogleAuth }
