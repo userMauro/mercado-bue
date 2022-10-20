@@ -13,7 +13,7 @@ const checkToken = (token) => {
         let data = null
         jwt.verify(token, process.env.SECRET, (err, decoded) => {
             if (err) {
-                return console.log('> Error al obtener data del token:', err)
+                return console.log('> Error al obtener data del token JWT')
             } else {
                 data = decoded
             } 

@@ -1,7 +1,6 @@
 const User = require('../../models/User')
 
 const bcrypt = require('bcrypt')
-// const jwt = require('jsonwebtoken')
 const { v4: uuidv4 } = require('uuid')
 
 const { validate } = require('./config/regex.config')
@@ -21,11 +20,11 @@ const authOK = (req, res, next) => {
             token = auth.substring(7);
         };
 
-        if (!token) return res.status(401).json({status: 'failed', msg: 'token missing or invalid'});
+        if (!token) return res.status(401).json({status: false, msg: 'error: token missing or invalid'});
 
         let decodedToken = checkToken(token)
         if (!decodedToken.id) {
-            return res.status(401).json({status: 'failed', msg: 'token missing or invalid'});
+            return res.status(401).json({status: false, msg: 'error: token missing or invalid'});
         };
 
         next();
@@ -34,18 +33,34 @@ const authOK = (req, res, next) => {
     };
 }
 
+const confirmEmail = (req, res, next) => {
+    try {
+        const { token } = req.params
+
+        const data = checkToken(token)
+
+        if (data === null) {
+            return res.status(401).json({status: false, msg: 'error: token invalid or expired'})
+        } else {
+            return res.status(200).json({status: true, msg: 'email verified successfully'})
+        }
+    } catch (error) {
+        next(error)
+    }
+}
+
 const preRegister = async (req, res, next) => {
     try {
         const { email } = req.body
 
         // regex para email
         if (!validate(email, 'email')) {
-            return res.status(401).json({status: 'failed', msg: 'invalid characters in email'})
+            return res.status(401).json({status: false, msg: 'error: invalid characters in email'})
         }
 
         // chequeo no repetir email
         const exists = await User.findOne({email})
-        if (exists) return res.status(400).json({status: 'failed', msg: 'email already exists'})
+        if (exists) return res.status(400).json({status: false, msg: 'error: email already exists'})
 
         // creo un token
         const token = createToken({email}, "1h")
@@ -57,16 +72,19 @@ const preRegister = async (req, res, next) => {
 
 const register = async (req, res, next) => {
     try {
-        const { username, password, email } = req.body
+        const { username, password, email, token } = req.body
+
+        // chequeo que el mail de token sea el mismo que el del registro
+        // if (token.email !== email) return res.status(401).json({status: false, msg: 'error: email token does not match email '})
 
         // regex para email/username
         if (!validate(email, 'email') || (!validate(username, 'username')))  {
-            return res.status(401).json({status: 'failed', msg: 'invalid characters in email/username'})
+            return res.status(401).json({status: false, msg: 'error: invalid characters in email/username'})
         }
 
         // chequeo no repetir email
         const exists = await User.findOne({email})
-        if (exists) return res.status(401).json({status: 'failed', msg: 'email already in use'})
+        if (exists) return res.status(401).json({status: false, msg: 'error: email already in use'})
 
 
         // hash passwd
@@ -85,8 +103,7 @@ const register = async (req, res, next) => {
 
         await user.save()
 
-        const data = {email, type: 'welcome'}
-        await sendEmail(data, res, next) 
+        await sendEmail({email, type: 'welcome'}, res, next) 
     } catch (error) {
         return next(error)
     };
@@ -98,13 +115,13 @@ const login = async (req, res, next) => {
 
         // regex para email
         if (!validate(email, 'email')) {
-            return res.status(401).json({status: 'failed', msg: 'invalid characters in email'})
+            return res.status(401).json({status: false, msg: 'error: invalid characters in email'})
         }
 
         // reviso si ya está logueado
         const logged = req.get('authorization');
         if (logged && logged.toLowerCase().startsWith('bearer')) {
-            return res.status(401).json({status: 'failed', msg: 'there is an account already logged in'})
+            return res.status(401).json({status: false, msg: 'error: there is an account already logged in'})
         }
 
         const user = await User.findOne({ email });
@@ -113,7 +130,7 @@ const login = async (req, res, next) => {
             ? false
             : await bcrypt.compare(password, user.passwordHash)
         
-        if (!passwordCorrect) return res.status(401).json({status: 'failed', msg: 'invalid email/password'})
+        if (!passwordCorrect) return res.status(401).json({status: false, msg: 'error: invalid email/password'})
 
         // si logueo bien, agrego la data que va a ir en el token codificado
         const data = {
@@ -124,24 +141,24 @@ const login = async (req, res, next) => {
         };
 
         const token = createToken(data, '30d')
-        return res.send({status: 'success', msg: token})
+        return res.send({status: true, msg: token})
     } catch (error) {
         return next(error);
     };
 }
 
-const confirmPasswordReset = async(req, res, next) => {
+const requestPassForgot = async(req, res, next) => {
     try {
         const { email } = req.body
 
         // regex para email
         if (!validate(email, 'email')) {
-            return res.status(401).json({status: 'failed', msg: 'invalid characters in email'})
+            return res.status(401).json({status: false, msg: 'error: invalid characters in email'})
         }
 
         // chequeo encontrar mail
         const exists = await User.findOne({email})
-        if (!exists) return res.status(401).json({status: 'failed', msg: 'email not founded in database'})
+        if (!exists) return res.status(401).json({status: false, msg: 'error: email not founded in database'})
 
         // creo un token
         const token = createToken({email}, "1h")
@@ -151,18 +168,18 @@ const confirmPasswordReset = async(req, res, next) => {
     }
 }
 
-const resetPassword = async(req, res, next) => {
+const confirmPassForgot = async(req, res, next) => {
     try {
         const { email } = req.body
 
         // regex para email
         if (!validate(email, 'email')) {
-            return res.status(401).json({status: 'failed', msg: 'invalid characters in email'})
+            return res.status(401).json({status: false, msg: 'error: invalid characters in email'})
         }
 
         // chequeo encontrar mail
         const user = await User.findOne({email})
-        if (!user) return res.status(401).json({status: 'failed', msg: 'email not founded in database'})
+        if (!user) return res.status(401).json({status: false, msg: 'error: email not founded in database'})
 
         const password = uuidv4().slice(0, 13)
 
@@ -173,10 +190,10 @@ const resetPassword = async(req, res, next) => {
         user.passwordHash = passwordHash
         user.save()
 
-        await sendEmail({email, type: 'temporaryPass', data: password}, res, next)
+        sendEmail({email, type: 'confirmPassForgot', data: password}, res, next)
     } catch (error) {
         return next(error);
     }
 }
 
-module.exports = { preRegister, register, login, authOK, confirmPasswordReset, resetPassword };
+module.exports = { preRegister, confirmEmail, register, login, authOK, requestPassForgot, confirmPassForgot };

@@ -37,9 +37,9 @@ const sendEmail = async(req, res, next) => {
 
             transporter.sendMail(emailDetail, (error) => {
                 if (error) {
-                    return res.status(404).json({status: 'failed', msg: error.message})
+                    return res.status(404).json({status: false, msg: error.message})
                 } else {
-                    return res.status(200).json({status: 'success', msg: `email sent successfully to ${emailDetail.to}, check it for more information`})
+                    return res.status(200).json({status: true, msg: `email sent successfully to ${emailDetail.to}, check it for more information`})
                 }
             })
         }, 3000)
@@ -54,7 +54,7 @@ const message = (type, data) => {
             return mail = {
                 subject: "Confirmar email Mercado Bue!",
                 text: "",
-                html: `<button href="${URL}/auth/register/confirm/${data}">Confirmar email</button>`, 
+                html: `<a href="${URL}/auth/register/confirm/${data}"><button>Confirmar email</button></a>`, 
             }
         case "welcome":
             return mail = {
@@ -66,9 +66,9 @@ const message = (type, data) => {
             return mail = {
                 subject: "Recuperar contraseña Mercado Bue!",
                 text: "",
-                html: `<button href="${URL}/auth/register/confirm/${data}">Confirmar email</button>`, 
+                html: `<a href="${URL}/auth/register/confirm/${data}"><button>Confirmar email</button></a>`, 
             }
-        case "temporaryPass":
+        case "confirmPassForgot":
             return mail = {
                 subject: "Contraseña provisoria Mercado Bue!",
                 text: "",
