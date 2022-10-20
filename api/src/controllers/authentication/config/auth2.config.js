@@ -13,8 +13,7 @@ const getGoogleAuth = async() => {
     })
 
     authClient.getAccessToken((err, refreshToken) => {
-        if (err) return console.log(err)
-        token.accessToken = refreshToken    // json
+        err ? console.log('> Error al obtener OAuth2 token:', err) : token.accessToken = refreshToken
     })
 }
 

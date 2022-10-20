@@ -1,13 +1,14 @@
 const User = require('../../models/User')
 
 const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+// const jwt = require('jsonwebtoken')
 const { v4: uuidv4 } = require('uuid')
 
-const { validate } = require('./regex')
-const { sendEmail, sendEmailNewPassword } = require('../email/nodemailer')
+const { validate } = require('./config/regex.config')
+const { sendEmail } = require('./config/nodemailer.config')
+const { createToken, checkToken } = require('./config/jwt.config')
 
-const authOK = async (req, res, next) => {
+const authOK = (req, res, next) => {
     // agregar esta funcion a rutas donde solo quiero que ingresen solo usuarios logueados
     
     try {
@@ -20,12 +21,10 @@ const authOK = async (req, res, next) => {
             token = auth.substring(7);
         };
 
-        let decodedToken = {};
-        try {
-            decodedToken = jwt.verify(token, process.env.SECRET);
-        } catch {};
+        if (!token) return res.status(401).json({status: 'failed', msg: 'token missing or invalid'});
 
-        if (!token || !decodedToken.id) {
+        let decodedToken = checkToken(token)
+        if (!decodedToken.id) {
             return res.status(401).json({status: 'failed', msg: 'token missing or invalid'});
         };
 
@@ -48,8 +47,9 @@ const preRegister = async (req, res, next) => {
         const exists = await User.findOne({email})
         if (exists) return res.status(400).json({status: 'failed', msg: 'email already exists'})
 
-        const data = {email, type: 'verifyEmail'}
-        await sendEmail(data, res, next)
+        // creo un token
+        const token = createToken({email}, "1h")
+        sendEmail({email, type: 'verify', data: token}, res, next)
     } catch (error) {
         return next(error)
     }
@@ -85,7 +85,7 @@ const register = async (req, res, next) => {
 
         await user.save()
 
-        const data = {email, type: 'welcomeEmail'}
+        const data = {email, type: 'welcome'}
         await sendEmail(data, res, next) 
     } catch (error) {
         return next(error)
@@ -123,11 +123,7 @@ const login = async (req, res, next) => {
             role: user.role,
         };
 
-        // creo el token modificado con la data y lo encripto con la palabra secreta
-        const token = jwt.sign(data, process.env.SECRET, {
-            expiresIn: 60 * 60 * 24 * 7     // expira cada 7 días (segs, mins, horas, dias)
-        });
-
+        const token = createToken(data, '30d')
         return res.send({status: 'success', msg: token})
     } catch (error) {
         return next(error);
@@ -147,8 +143,9 @@ const confirmPasswordReset = async(req, res, next) => {
         const exists = await User.findOne({email})
         if (!exists) return res.status(401).json({status: 'failed', msg: 'email not founded in database'})
 
-        const data = {email, type: 'confirmPasswordReset'}
-        await sendEmail(data, res, next)
+        // creo un token
+        const token = createToken({email}, "1h")
+        await sendEmail({email, type: 'requestPassForgot', data: token}, res, next)
     } catch (error) {
         next(error)
     }
@@ -176,8 +173,7 @@ const resetPassword = async(req, res, next) => {
         user.passwordHash = passwordHash
         user.save()
 
-        const data = {email, type: 'resetPassword', password}
-        await sendEmailNewPassword(data, res, next)
+        await sendEmail({email, type: 'temporaryPass', data: password}, res, next)
     } catch (error) {
         return next(error);
     }
