@@ -2,10 +2,10 @@
 
 BACKEND
     [ x ] Auth:
-        [ x ] Registrarse:
-            [ x ] preregistrarse mandando un mail al email ingresado
+        [ ✔ ] Registrarse:
+            [ ✔ ] preregistrarse mandando un mail al email ingresado
                 [ ✔ ] fail: email inválido o inexistente, input vacío
-                [ x ] success: enviarle link al mail para registrarse con username/password
+                [ ✔ ] success: enviarle link al mail para registrarse con username/password
             [ ✔ ] confirmar registro, creando un username/password
                 [ ✔ ] fail: username/password inválidos o existentes, inputs vacíos
                 [ ✔ ] success: crear usuario en la db
@@ -16,11 +16,11 @@ BACKEND
                 [ ✔ ] success: otorgarle JWT token
 
         [ x ] Reset password:
-            [ x ] enviar mail para confirmar cambio de contraseña
-                [ x ] fail: email inválido o inexistente, input vacío
-                [ x ] success: enviar email para confirmación
+            [ ✔ ] enviar mail para confirmar cambio de contraseña
+                [ ✔ ] fail: email inválido o inexistente, input vacío
+                [ ✔ ] success: enviar email para confirmación
             [ x ] confirmar reseteo de password entrando a un link
-                [ x ] fail: nada
+                [ ✔ ] fail: nada
                 [ x ] success: cambiar password en la db y enviarle mail con la nueva password
 
 FRONTEND
@@ -31,7 +31,7 @@ FRONTEND
                 [ x ] success: redireccionarlo a "Auth" para que loguee con sus credenciales
 
         [ x ] Loguearse:
-            [ x ] componente "Auth" para login/register/resetPassword
+            [ x ] componente "Auth" para login/register/confirmPassForgot
                 [ x ] fail: email/password inválidas, inputs vacíos
                 [ x ] success: otorgarle un token JWT y redireccionarlo al home/compras
 
