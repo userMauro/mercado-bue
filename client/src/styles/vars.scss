@@ -1,16 +1,16 @@
-// // Colors
-// $bueBackground: linear-gradient(to bottom, #0167ff, #019AFF); 
-// $bueYellow: #ffc401;
-// $bueBlue: #019AFF; 
-// $bueNightColor: rgb(60, 60, 60);
-// $bueLightColor: rgb(255, 255, 255);
+// Colors
+$bueBackground: linear-gradient(to bottom, #0167ff, #019AFF); 
+$bueYellow: #ffc401;
+$bueBlue: #019AFF; 
+$bueNightColor: rgb(31, 31, 31);
+$bueNightColor2:rgb(47, 47, 47);
+$bueLightColor: rgb(255, 255, 255);
+
+// Fonts
+$bueFontTitle: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 
 
-// // Fonts
-// $bueFontTitle: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-
-
-// // ComponentConfig
+// ComponentConfig
 // @mixin componentConfig($colorBg) {
 //     height: 65vh;
 //     display: flex;
@@ -20,23 +20,22 @@
 //     cursor: default;
 // }
 
-// // Buttons
-// @mixin bueButton(){
-//     cursor: pointer;
-//     color: white;
-//     background-color: #ffc401;
-//     text-shadow: 0 1px 1px rgba(0,0,0,0.5);
-//     border: none;
-//     font-size: 18px;
-//     border-radius: 5px;
-//     height: 55px;
-//     width: 160px;
+// Buttons
+@mixin bueButton(){
+    cursor: pointer;
+    color: white;
+    background-color: #ffc401;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+    border: none;
+    font-size: 18px;
+    border-radius: 5px;
+    height: 55px;
+    width: 160px;
 
-//     &:hover {
-//         scale: 1.2;
-//         transition: .3s ease-out;
-//     }
-// }
+    &:hover {
+        transition: .3s ease-out;
+    }
+}
 
 // @mixin bueBack() {
 //     text-decoration: none;
@@ -56,5 +55,3 @@
 
 
 
-// modo oscuro
-// background-color: #262626;

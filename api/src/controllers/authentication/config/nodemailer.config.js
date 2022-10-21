@@ -42,7 +42,7 @@ const sendEmail = async(req, res, next) => {
                     return res.status(200).json({status: true, msg: `email sent successfully to ${emailDetail.to}, check it for more information`})
                 }
             })
-        }, 3000)
+        }, 1000)
     } catch (error) {
         next(error)
     }
@@ -54,7 +54,7 @@ const message = (type, data) => {
             return mail = {
                 subject: "Confirmar email Mercado Bue!",
                 text: "",
-                html: `<a href="${URL}/auth/register/confirm/${data}"><button>Confirmar email</button></a>`, 
+                html: `<a href="${URL}/confirm/email/${data}"><button>Confirmar email</button></a>`, 
             }
         case "welcome":
             return mail = {

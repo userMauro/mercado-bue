@@ -8,8 +8,6 @@ const { sendEmail } = require('./config/nodemailer.config')
 const { createToken, checkToken } = require('./config/jwt.config')
 
 const authOK = (req, res, next) => {
-    // agregar esta funcion a rutas donde solo quiero que ingresen solo usuarios logueados
-    
     try {
         const auth = req.get('authorization');     // recupera la cabecera http 'authorization' (es de express)
 
@@ -20,16 +18,14 @@ const authOK = (req, res, next) => {
             token = auth.substring(7);
         };
 
-        if (!token) return res.status(401).json({status: false, msg: 'error: token missing or invalid'});
-
-        let decodedToken = checkToken(token)
-        if (!decodedToken.id) {
+        if (!checkToken(token)) {
             return res.status(401).json({status: false, msg: 'error: token missing or invalid'});
         };
 
-        next();
+        // next()
+        return res.status(200).json({status: true, msg: 'credentials are ok'})
     } catch (error) {
-        return next(error);
+        next(error);
     };
 }
 
@@ -51,7 +47,7 @@ const confirmEmail = (req, res, next) => {
 
 const preRegister = async (req, res, next) => {
     try {
-        const { email } = req.body
+        const { email } = req.params
 
         // regex para email
         if (!validate(email, 'email')) {
@@ -60,7 +56,7 @@ const preRegister = async (req, res, next) => {
 
         // chequeo no repetir email
         const exists = await User.findOne({email})
-        if (exists) return res.status(400).json({status: false, msg: 'error: email already exists'})
+        if (exists) return res.status(401).json({status: false, msg: 'error: email already exists'})
 
         // creo un token
         const token = createToken({email}, "1h")
@@ -149,7 +145,7 @@ const login = async (req, res, next) => {
 
 const requestPassForgot = async(req, res, next) => {
     try {
-        const { email } = req.body
+        const { email } = req.params
 
         // regex para email
         if (!validate(email, 'email')) {
