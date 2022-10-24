@@ -11,14 +11,51 @@
   color: #ffc401;
   font: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
   cursor: default;
+  margin: 0;
 }
 .Authenticate #error {
   color: red;
-  font-size: 13px;
-  margin-bottom: 5px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: default;
 }
 .Authenticate #loading {
   color: rgb(255, 255, 255);
+}
+.Authenticate button {
+  cursor: pointer;
+  color: white;
+  background-color: #ffc401;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+  border: none;
+  font-size: 18px;
+  border-radius: 5px;
+  height: 55px;
+  width: 160px;
+}
+.Authenticate button:hover {
+  transition: 0.3s ease-out;
+}
+.Authenticate input {
+  padding: 10px 20px 10px 20px;
+  width: 250px;
+  text-align: center;
+  outline: none;
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+.Authenticate label {
+  color: white;
+}
+.Authenticate #links {
+  margin: 0;
+  color: darkgray;
+  cursor: pointer;
+  font-size: 13px;
+  text-decoration: none;
+}
+.Authenticate #links:hover {
+  color: #ffc401;
 }
 
 .authenticate-container {
@@ -26,8 +63,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 30%;
-  height: 50%;
+  width: 40%;
+  height: 60%;
   border-radius: 5px;
   background-color: rgb(47, 47, 47);
   gap: 20px;
@@ -39,39 +76,8 @@
   flex-direction: column;
   align-items: center;
 }
-.authenticate-form input {
-  padding: 10px 20px 10px 20px;
-  width: 250px;
-  text-align: center;
-  outline: none;
-  margin-bottom: 10px;
-  font-size: 15px;
-}
-.authenticate-form button {
-  cursor: pointer;
-  color: white;
-  background-color: #ffc401;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
-  border: none;
-  font-size: 18px;
-  border-radius: 5px;
-  height: 55px;
-  width: 160px;
-}
-.authenticate-form button:hover {
-  transition: 0.3s ease-out;
-}
 
 .authenticate-options {
   display: flex;
   flex-direction: column;
-}
-.authenticate-options p {
-  margin: 0;
-  color: darkgray;
-  cursor: pointer;
-  font-size: 13px;
-}
-.authenticate-options p:hover {
-  color: #ffc401;
 }/*# sourceMappingURL=Authenticate.css.map */

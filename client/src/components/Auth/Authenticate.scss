@@ -14,16 +14,47 @@
         color: $bueYellow;
         font: $bueFontTitle;
         cursor: default;
+        margin: 0;
     }
 
     #error {
         color: red;
-        font-size: 13px;
-        margin-bottom: 5px;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: default;
     }
 
     #loading {
         color: $bueLightColor;
+    }
+
+    button {
+        @include bueButton()
+    }
+
+    input {
+        padding: 10px 20px 10px 20px;
+        width: 250px;
+        text-align: center;
+        outline: none;
+        margin-bottom: 10px;
+        font-size: 15px;
+    }
+
+    label {
+        color: white;
+    }
+
+    #links {
+        margin: 0;
+        color: darkgray;
+        cursor: pointer;
+        font-size: 13px;
+        text-decoration: none;
+    }
+
+    #links:hover {
+        color: $bueYellow;
     }
 }
 
@@ -32,8 +63,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 30%;
-    height: 50%;
+    width: 40%;
+    height: 60%;
     border-radius: 5px;
     background-color: $bueNightColor2;
     gap: 20px;
@@ -45,33 +76,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    input {
-        padding: 10px 20px 10px 20px;
-        width: 250px;
-        text-align: center;
-        outline: none;
-        margin-bottom: 10px;
-        font-size: 15px;
-    }
-
-    button {
-        @include bueButton()
-    }
 }
 
 .authenticate-options {
     display: flex;
     flex-direction: column;
-
-    p {
-        margin: 0;
-        color: darkgray;
-        cursor: pointer;
-        font-size: 13px;
-    }
-
-    p:hover {
-        color: $bueYellow;
-    }
 }

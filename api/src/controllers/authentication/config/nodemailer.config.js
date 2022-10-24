@@ -1,7 +1,6 @@
 const nodemailer = require("nodemailer");
 
 const { NODEMAILER_USER, AUTH_ID_CLIENT, AUTH_SECRET_CLIENT } = process.env
-const { URL } = require('../../../../URL')
 const { getGoogleAuth } = require('./auth2.config')
 const token = require('./token.json')
 
@@ -39,10 +38,10 @@ const sendEmail = async(req, res, next) => {
                 if (error) {
                     return res.status(404).json({status: false, msg: error.message})
                 } else {
-                    return res.status(200).json({status: true, msg: `email sent successfully to ${emailDetail.to}, check it for more information`})
+                    return res.status(200).json({status: true, msg: data?.token})
                 }
             })
-        }, 1000)
+        }, 3000)
     } catch (error) {
         next(error)
     }
@@ -54,25 +53,25 @@ const message = (type, data) => {
             return mail = {
                 subject: "Confirmar email Mercado Bue!",
                 text: "",
-                html: `<a href="${URL}/confirm/email/${data}"><button>Confirmar email</button></a>`, 
+                html: `<h1>${data.code}</h1>`, 
             }
         case "welcome":
             return mail = {
-                subject: "Bienvenida/o a la comunidad de Mercado Bue!",
+                subject: `Bienvenida/o a Mercado Bue!`,
                 text: "",
-                html: "<p>Hola! Antes de empezar a comprar o vender, te aconsejamos que leas nuestros tips: TIPS</p>"
+                html: `<p>Hola ${data}! Antes de empezar a comprar o vender, te aconsejamos que leas nuestros tips:</p>`
             }
         case "requestPassForgot":
             return mail = {
                 subject: "Recuperar contraseña Mercado Bue!",
                 text: "",
-                html: `<a href="${URL}/auth/register/confirm/${data}"><button>Confirmar email</button></a>`, 
+                html: `<h1>${data.code}</h1>`, 
             }
         case "confirmPassForgot":
             return mail = {
-                subject: "Contraseña provisoria Mercado Bue!",
+                subject: "Nueva contraseña Mercado Bue!",
                 text: "",
-                html: `<p>Esta es tu contraseña provisoria, vence en 1 hora, ingresa a tu cuenta para cambiarla.</p><h1>${data}</h1>`, 
+                html: `<p>Tu contraseña fue cambiada exitosamente.</p>`, 
             }
         default:
             break

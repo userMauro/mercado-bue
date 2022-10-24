@@ -34,7 +34,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />}  />
         <Route path="/login" element={<Authenticate />} />
-        <Route path="/confirm/email/:token" element={<ConfirmEmail />} />
+        <Route path="/confirm/email/:action" element={<ConfirmEmail />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>

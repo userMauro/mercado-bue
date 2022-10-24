@@ -1,12 +1,12 @@
 const authRouter = require('express').Router()
 
-const { login, confirmPassForgot, preRegister, requestPassForgot, confirmEmail, register, authOK } = require('../controllers/authentication/auth')
+const { login, confirmPassForgot, preRegister, requestPassForgot, register, authOK, confirmCode } = require('../controllers/authentication/auth')
 
 authRouter.get('/authorize', authOK)
-authRouter.get('/register/:email', preRegister)
-authRouter.get('/register/confirm/:token', confirmEmail)
-authRouter.post('/register/create', register)
 authRouter.post('/login', login)
+authRouter.post('/confirm/code', confirmCode)
+authRouter.get('/register/:email', preRegister)
+authRouter.post('/register/create', register)
 authRouter.get('/resetPass/:email', requestPassForgot)
 authRouter.put('/resetPass/confirm', confirmPassForgot)
 

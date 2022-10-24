@@ -1,17 +1,26 @@
 import React, { useState } from 'react'
+import { Link } from "react-router-dom";
 import axios from 'axios'
 
 import "./Authenticate.css"
 import URL from "../../URL"
 import { validate } from '../../utils/validate'
+import { useNavigate } from 'react-router-dom'
 
 export default function Authenticate () {
+    const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState('')
     const [credentials, setCredentials] = useState({
         email: '',
         password: '',
     })
+
+    if (isLoading === true) return (
+        <div className="Authenticate">
+            <h1 id="loading">Loading...</h1>
+        </div>
+    )
 
     const handleChange = (e) => {
         setCredentials({
@@ -20,62 +29,32 @@ export default function Authenticate () {
         })
     }
 
-    const cleanStates = () => {
-        setCredentials({email: '', password: ''})
-        setError('')
-    }
-
     const login = async(e) => {
         e.preventDefault(e)
-        try {
-            const { data } = await axios.post(`${URL}/auth/login`, credentials)
-            alert(data.msg)
-            cleanStates()
-        } catch (error) {
-            setError(error.response.data.msg)  
-        }
-    }
-
-    const requestPassForgot = async() => {
         if (!validate(credentials.email, "email")) return setError('Email inválido')
+
         setIsLoading(true)
 
         try {
-            const { data } = await axios.get(`${URL}/auth/resetPass/${credentials.email}`)
+            await axios.post(`${URL}/auth/login`, credentials)
             setIsLoading(false)
-            console.log(data)
-            cleanStates()
-            setError(data.msg)
+            setCredentials({email: '', password: ''})
+            setError('')
+            navigate('/')
         } catch (error) {
             setIsLoading(false)
+            setCredentials({
+                ...credentials,
+                password: ''
+            })
             setError(error.response.data.msg)  
         }
     }
-
-    const startRegister = async() => {
-        if (!validate(credentials.email, "email")) return setError('Email inválido')
-        setIsLoading(true)
-
-        try {
-            const { data } = await axios.get(`${URL}/auth/register/${credentials.email}`)
-            setIsLoading(false)
-            cleanStates()
-            setError(data.msg)
-        } catch (error) {
-            setIsLoading(false)
-            setError(error.response.data.msg)
-        }   
-    }
-
-    if (isLoading === true) return (
-        <div className="Authenticate">
-            <h1 id="loading">Loading...</h1>
-        </div>
-    )
 
     return (
         <div className="Authenticate">
             <div className="authenticate-container">
+                <h1>Ingresa a tu cuenta</h1>
                 <form action="" onSubmit={(e) => login(e)} className="authenticate-form">
                     <input required placeholder="ejemplo@mercadobue.com.ar" type="email" name="email" value={credentials.email} onChange={handleChange} spellcheck="false" />
                     <input required placeholder="******" type="password" name="password" value={credentials.password} onChange={handleChange} />
@@ -83,8 +62,8 @@ export default function Authenticate () {
                     <button type="submit">INGRESAR</button>
                 </form>
                 <div className="authenticate-options">
-                    <p onClick={(() => requestPassForgot())}>¿Olvidaste la contraseña?</p>
-                    <p onClick={(() => startRegister())}>Registrarse</p>
+                    <Link id="links" to="/confirm/email/recupass">¿Olvidaste la contraseña?</Link>
+                    <Link id="links" to="/confirm/email/register">Registrarse</Link>
                 </div>
             </div>
         </div>
