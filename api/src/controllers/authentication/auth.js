@@ -62,7 +62,7 @@ const preRegister = async (req, res, next) => {
         const code = uuidv4().slice(0, 6)
 
         // creo un token
-        const token = createToken({email, code}, "60h") // 60s
+        const token = createToken({email, code}, "60s") // 60s
         sendEmail({email, type: 'verify', data: {token, code}}, res, next)
     } catch (error) {
         return next(error)
@@ -160,7 +160,7 @@ const requestPassForgot = async(req, res, next) => {
         const code = uuidv4().slice(0, 6)
 
         // creo un token
-        const token = createToken({email, code}, "1h")
+        const token = createToken({email, code}, "60s")
         await sendEmail({email, type: 'requestPassForgot', data: {token, code}}, res, next)
     } catch (error) {
         next(error)

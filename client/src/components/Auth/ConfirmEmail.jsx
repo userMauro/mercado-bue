@@ -98,7 +98,7 @@ export default function ConfirmEmail () {
             setStep(3)
         } catch (error) {
             setIsLoading(false)
-            setError(error.response.data.msg)  
+            setError('Expired or invalid token')  
         }
     }
 
