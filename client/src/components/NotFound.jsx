@@ -5,7 +5,7 @@ export default function NotFound () {
     return (
         <div>
             Not found 404
-            <Link to = '/home'><button>HOME</button></Link>
+            <Link to = '/'><button>Home</button></Link>
         </div>
     );
 };

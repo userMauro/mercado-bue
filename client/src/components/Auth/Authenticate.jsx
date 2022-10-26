@@ -1,14 +1,20 @@
 import React, { useState } from 'react'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
 import axios from 'axios'
 
 import "./Authenticate.css"
 import URL from "../../URL"
-import { validate } from '../../utils/validate'
-import { useNavigate } from 'react-router-dom'
+import { regex } from '../../utils/regex'
+import { setUserData } from '../../redux/user.slice';
+
 
 export default function Authenticate () {
+
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState('')
     const [credentials, setCredentials] = useState({
@@ -31,15 +37,24 @@ export default function Authenticate () {
 
     const login = async(e) => {
         e.preventDefault(e)
-        if (!validate(credentials.email, "email")) return setError('Email inválido')
+        if (!regex(credentials.email, "email")) return setError('Email inválido')
 
         setIsLoading(true)
 
         try {
-            await axios.post(`${URL}/auth/login`, credentials)
+            const { data } = await axios.post(`${URL}/auth/login`, credentials)
+
+            // guardo credenciales en localStorage
+            localStorage.setItem("logCredentials", JSON.stringify(data.msg))
+
+            // guardo credenciales en reducer
+            dispatch(setUserData(data.msg))
+
+            // limpio estados locales
             setIsLoading(false)
             setCredentials({email: '', password: ''})
             setError('')
+
             navigate('/')
         } catch (error) {
             setIsLoading(false)
@@ -47,7 +62,7 @@ export default function Authenticate () {
                 ...credentials,
                 password: ''
             })
-            setError(error.response.data.msg)  
+            setError(error.response ? error.response.data.msg : 'unexpected error')  
         }
     }
 
@@ -56,14 +71,14 @@ export default function Authenticate () {
             <div className="authenticate-container">
                 <h1>Ingresa a tu cuenta</h1>
                 <form action="" onSubmit={(e) => login(e)} className="authenticate-form">
-                    <input required placeholder="ejemplo@mercadobue.com.ar" type="email" name="email" value={credentials.email} onChange={handleChange} spellcheck="false" />
+                    <input required placeholder="ejemplo@mercadobue.com.ar" type="email" name="email" value={credentials.email} onChange={handleChange} spellCheck="false" />
                     <input required placeholder="******" type="password" name="password" value={credentials.password} onChange={handleChange} />
                     <div id="error">{error}</div>
                     <button type="submit">INGRESAR</button>
                 </form>
                 <div className="authenticate-options">
-                    <Link id="links" to="/confirm/email/recupass">¿Olvidaste la contraseña?</Link>
-                    <Link id="links" to="/confirm/email/register">Registrarse</Link>
+                    <Link id="links" to="/auth/confirm/email/recupass">¿Olvidaste la contraseña?</Link>
+                    <Link id="links" to="/auth/confirm/email/register">Registrarse</Link>
                 </div>
             </div>
         </div>

@@ -136,8 +136,10 @@ const login = async (req, res, next) => {
             role: user.role,
         };
 
+        const { username, role} = user
+
         const token = createToken(data, '30d')
-        return res.send({status: true, msg: token})
+        return res.send({status: true, msg: {username, email, role, token}})
     } catch (error) {
         return next(error);
     };

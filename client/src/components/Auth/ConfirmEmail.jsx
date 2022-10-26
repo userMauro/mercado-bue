@@ -3,7 +3,7 @@ import axios from 'axios'
 
 // utils
 import URL from "../../URL"
-import { validate } from '../../utils/validate'
+import { regex } from '../../utils/regex'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 
 
@@ -50,7 +50,7 @@ export default function ConfirmEmail () {
     const checkEmail = async(e) => {
         e.preventDefault(e)
 
-        if (!validate(credentials.email, "email")) return setError('Email inválido')
+        if (!regex(credentials.email, "email")) return setError('Email inválido')
 
         setIsLoading(true)
 
@@ -163,7 +163,7 @@ export default function ConfirmEmail () {
                 />
                 <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "20px"}}>
                     <button type="submit" onClick={(e) => checkEmail(e)}>CONFIRMAR</button>
-                    <Link id="links" to="/login"><button>CANCELAR</button></Link>
+                    <Link id="links" to="/auth/login"><button>CANCELAR</button></Link>
                 </div>
                 <span id="error">{error}</span>
             </div>
@@ -179,7 +179,7 @@ export default function ConfirmEmail () {
                 <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "20px"}}>
                     <button disabled id="btn-countdown" type="submit" onClick={() => checkEmail()}>0:00{/*count*/}</button>
                     <button id="btn-countdown" type="submit" onClick={(e) => checkCode(e)}>CONFIRMAR</button>
-                    <Link id="links" to="/login"><button>CANCELAR</button></Link>
+                    <Link id="links" to="/auth/login"><button>CANCELAR</button></Link>
                 </div>
                 <span id="error">{error}</span>
             </div>
@@ -197,7 +197,7 @@ export default function ConfirmEmail () {
                     <input required placeholder="Repetir contraseña" type="password" name="password2" value={credentials.password2} onChange={handleChange} />
                     <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "20px"}}>
                         <button type="submit" onClick={(e) => createAccount(e)}>CONFIRMAR</button>
-                        <Link id="links" to="/login"><button>CANCELAR</button></Link>
+                        <Link id="links" to="/auth/login"><button>CANCELAR</button></Link>
                     </div>
                     <span id="error">{error}</span>
                 </div>
