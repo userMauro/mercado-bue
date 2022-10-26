@@ -8,8 +8,6 @@ const { sendEmail } = require('./config/nodemailer.config')
 const { createToken, checkToken } = require('./config/jwt.config')
 
 const authOK = (req, res, next) => {
-    // agregar esta funcion a rutas donde solo quiero que ingresen solo usuarios logueados
-    
     try {
         const auth = req.get('authorization');     // recupera la cabecera http 'authorization' (es de express)
 
@@ -20,29 +18,27 @@ const authOK = (req, res, next) => {
             token = auth.substring(7);
         };
 
-        if (!token) return res.status(401).json({status: false, msg: 'error: token missing or invalid'});
-
-        let decodedToken = checkToken(token)
-        if (!decodedToken.id) {
-            return res.status(401).json({status: false, msg: 'error: token missing or invalid'});
+        if (!checkToken(token)) {
+            return res.status(401).json({status: false, msg: 'Token missing or invalid'});
         };
 
-        next();
+        // next()
+        return res.status(200).json({status: true, msg: 'Credentials are ok'})
     } catch (error) {
-        return next(error);
+        next(error);
     };
 }
 
-const confirmEmail = (req, res, next) => {
+const confirmCode = (req, res, next) => {
     try {
-        const { token } = req.params
+        const { email, token, code } = req.body
 
         const data = checkToken(token)
 
-        if (data === null) {
-            return res.status(401).json({status: false, msg: 'error: token invalid or expired'})
+        if (email === data.email && code === data.code) {
+            return res.status(200).json({status: true, msg: 'Email verified successfully'})
         } else {
-            return res.status(200).json({status: true, msg: 'email verified successfully'})
+            return res.status(401).json({status: false, msg: 'Token invalid or expired'})
         }
     } catch (error) {
         next(error)
@@ -51,20 +47,23 @@ const confirmEmail = (req, res, next) => {
 
 const preRegister = async (req, res, next) => {
     try {
-        const { email } = req.body
+        const { email } = req.params
 
         // regex para email
         if (!validate(email, 'email')) {
-            return res.status(401).json({status: false, msg: 'error: invalid characters in email'})
+            return res.status(401).json({status: false, msg: 'Invalid characters in email'})
         }
 
         // chequeo no repetir email
         const exists = await User.findOne({email})
-        if (exists) return res.status(400).json({status: false, msg: 'error: email already exists'})
+        if (exists) return res.status(401).json({status: false, msg: 'Email already exists'})
+
+        // creo el código aleatorio
+        const code = uuidv4().slice(0, 6)
 
         // creo un token
-        const token = createToken({email}, "1h")
-        sendEmail({email, type: 'verify', data: token}, res, next)
+        const token = createToken({email, code}, "60s") // 60s
+        sendEmail({email, type: 'verify', data: {token, code}}, res, next)
     } catch (error) {
         return next(error)
     }
@@ -72,19 +71,16 @@ const preRegister = async (req, res, next) => {
 
 const register = async (req, res, next) => {
     try {
-        const { username, password, email, token } = req.body
-
-        // chequeo que el mail de token sea el mismo que el del registro
-        // if (token.email !== email) return res.status(401).json({status: false, msg: 'error: email token does not match email '})
+        const { username, password, email } = req.body
 
         // regex para email/username
         if (!validate(email, 'email') || (!validate(username, 'username')))  {
-            return res.status(401).json({status: false, msg: 'error: invalid characters in email/username'})
+            return res.status(401).json({status: false, msg: 'Invalid characters in email/username'})
         }
 
         // chequeo no repetir email
         const exists = await User.findOne({email})
-        if (exists) return res.status(401).json({status: false, msg: 'error: email already in use'})
+        if (exists) return res.status(401).json({status: false, msg: 'Email already in use'})
 
 
         // hash passwd
@@ -103,7 +99,7 @@ const register = async (req, res, next) => {
 
         await user.save()
 
-        await sendEmail({email, type: 'welcome'}, res, next) 
+        await sendEmail({email, type: 'welcome', data: username}, res, next) 
     } catch (error) {
         return next(error)
     };
@@ -115,13 +111,13 @@ const login = async (req, res, next) => {
 
         // regex para email
         if (!validate(email, 'email')) {
-            return res.status(401).json({status: false, msg: 'error: invalid characters in email'})
+            return res.status(401).json({status: false, msg: 'Invalid characters in email'})
         }
 
         // reviso si ya está logueado
         const logged = req.get('authorization');
         if (logged && logged.toLowerCase().startsWith('bearer')) {
-            return res.status(401).json({status: false, msg: 'error: there is an account already logged in'})
+            return res.status(401).json({status: false, msg: 'There is an account already logged in'})
         }
 
         const user = await User.findOne({ email });
@@ -130,7 +126,7 @@ const login = async (req, res, next) => {
             ? false
             : await bcrypt.compare(password, user.passwordHash)
         
-        if (!passwordCorrect) return res.status(401).json({status: false, msg: 'error: invalid email/password'})
+        if (!passwordCorrect) return res.status(401).json({status: false, msg: 'Invalid email/password'})
 
         // si logueo bien, agrego la data que va a ir en el token codificado
         const data = {
@@ -149,20 +145,23 @@ const login = async (req, res, next) => {
 
 const requestPassForgot = async(req, res, next) => {
     try {
-        const { email } = req.body
+        const { email } = req.params
 
         // regex para email
         if (!validate(email, 'email')) {
-            return res.status(401).json({status: false, msg: 'error: invalid characters in email'})
+            return res.status(401).json({status: false, msg: 'Invalid characters in email'})
         }
 
         // chequeo encontrar mail
         const exists = await User.findOne({email})
-        if (!exists) return res.status(401).json({status: false, msg: 'error: email not founded in database'})
+        if (!exists) return res.status(401).json({status: false, msg: 'Email not founded in database'})
+
+        // creo el código aleatorio
+        const code = uuidv4().slice(0, 6)
 
         // creo un token
-        const token = createToken({email}, "1h")
-        await sendEmail({email, type: 'requestPassForgot', data: token}, res, next)
+        const token = createToken({email, code}, "60s")
+        await sendEmail({email, type: 'requestPassForgot', data: {token, code}}, res, next)
     } catch (error) {
         next(error)
     }
@@ -170,18 +169,16 @@ const requestPassForgot = async(req, res, next) => {
 
 const confirmPassForgot = async(req, res, next) => {
     try {
-        const { email } = req.body
+        const { email, password } = req.body
 
         // regex para email
         if (!validate(email, 'email')) {
-            return res.status(401).json({status: false, msg: 'error: invalid characters in email'})
+            return res.status(401).json({status: false, msg: 'Invalid characters in email'})
         }
 
         // chequeo encontrar mail
         const user = await User.findOne({email})
-        if (!user) return res.status(401).json({status: false, msg: 'error: email not founded in database'})
-
-        const password = uuidv4().slice(0, 13)
+        if (!user) return res.status(401).json({status: false, msg: 'Email not founded in database'})
 
         // hash passwd
             const saltRounds = 10
@@ -190,10 +187,10 @@ const confirmPassForgot = async(req, res, next) => {
         user.passwordHash = passwordHash
         user.save()
 
-        sendEmail({email, type: 'confirmPassForgot', data: password}, res, next)
+        sendEmail({email, type: 'confirmPassForgot'}, res, next)
     } catch (error) {
         return next(error);
     }
 }
 
-module.exports = { preRegister, confirmEmail, register, login, authOK, requestPassForgot, confirmPassForgot };
+module.exports = { preRegister, register, login, authOK, requestPassForgot, confirmPassForgot, confirmCode };
