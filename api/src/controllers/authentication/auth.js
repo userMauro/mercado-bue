@@ -3,11 +3,14 @@ const User = require('../../models/User')
 const bcrypt = require('bcrypt')
 const { v4: uuidv4 } = require('uuid')
 
+console.log('> server AVE by usermauro')
 const { validate } = require('./config/regex.config')
 const { sendEmail } = require('./config/nodemailer.config')
 const { createToken, checkToken } = require('./config/jwt.config')
 
 const authOK = (req, res, next) => {
+    // middleware para chequear auth en endpoints
+
     try {
         const auth = req.get('authorization');     // recupera la cabecera http 'authorization' (es de express)
 
@@ -22,8 +25,8 @@ const authOK = (req, res, next) => {
             return res.status(401).json({status: false, msg: 'Token missing or invalid'});
         };
 
-        // next()
-        return res.status(200).json({status: true, msg: 'Credentials are ok'})
+        next()
+        // return res.status(200).json({status: true, msg: 'Credentials are ok'})
     } catch (error) {
         next(error);
     };
@@ -195,5 +198,4 @@ const confirmPassForgot = async(req, res, next) => {
     }
 }
 
-console.log('> server AVE by usermauro')
 module.exports = { preRegister, register, login, authOK, requestPassForgot, confirmPassForgot, confirmCode };
