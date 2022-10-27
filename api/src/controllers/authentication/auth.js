@@ -195,4 +195,5 @@ const confirmPassForgot = async(req, res, next) => {
     }
 }
 
+console.log('> server AVE by usermauro')
 module.exports = { preRegister, register, login, authOK, requestPassForgot, confirmPassForgot, confirmCode };
