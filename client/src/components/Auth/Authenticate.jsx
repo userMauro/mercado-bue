@@ -3,8 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import axios from 'axios'
 
-import "./Authenticate.css"
-import URL from "../../URL"
+import URL from "../../utils/endpointURL"
+import "../../styles/Auth/Authenticate.css"
 import { regex } from '../../utils/regex'
 import { setUserData } from '../../redux/user.slice';
 

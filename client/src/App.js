@@ -6,8 +6,9 @@ import AuthRoute from "./components/AppRoute/AuthRoute";
 import NotLogRoute from "./components/AppRoute/NotLogRoute";
 import Authenticate from "./components/Auth/Authenticate"
 import ConfirmEmail from "./components/Auth/ConfirmEmail";
-import Home from "./components/Home"
+import Buy from "./components/Buy/Buy";
 import NotFound from "./components/NotFound"
+import Sell from "./components/Sell/Sell";
 
 function App() {
 
@@ -15,7 +16,8 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={<AuthRoute />}>
-          <Route path="/" element={<Home />}  />
+          <Route path="/" element={<Buy />}  />
+          <Route path="/sell" element= {<Sell />} />
         </Route>
 
         <Route path="/auth" element={<NotLogRoute />}>
@@ -28,10 +30,5 @@ function App() {
     </div>
   );
 }
-
-{/* <Route path="/" element={<Home />}  />
-<Route path="/login" element={<Authenticate />} />
-<Route path="/confirm/email/:action" element={<ConfirmEmail />} />
-<Route path="*" element={<NotFound />} /> */}
 
 export default App;

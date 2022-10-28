@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 
 // utils
-import URL from "../../URL"
+import URL from "../../utils/endpointURL"
+import NotFound from '../NotFound'
 import { regex } from '../../utils/regex'
-import { useParams, useNavigate, Link } from 'react-router-dom'
 
 
 export default function ConfirmEmail () {
@@ -146,11 +147,7 @@ export default function ConfirmEmail () {
     }
 
     // step 0: not fount 404
-    if (action !== "register" && action !== "recupass") return (
-        <>
-            Not found 404
-        </>
-    )
+    if (action !== "register" && action !== "recupass") return <NotFound />
 
     // step 1: confirmar email
     if (step === 1) return (
