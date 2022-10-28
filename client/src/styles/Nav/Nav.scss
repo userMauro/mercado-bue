@@ -1,0 +1,45 @@
+@import "../Vars/vars.scss";
+
+.Nav {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    background-color: $bueYellow;
+
+    ul {
+        display: flex;
+        flex-direction: row;
+        list-style-type: none;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+        width: 100%;
+        margin: 0;
+        gap: 5%;
+    }
+
+    li {
+        list-style: none;
+        margin: 0;
+        padding: 12px;
+
+        img {
+            width: 35px;
+            height: 35px;
+        }
+
+        img:hover {
+            scale: 1.2;
+        }
+    }
+
+    #link {
+        text-decoration: none;
+        color: rgb(77, 77, 77)
+    }
+
+    #link:hover {
+        color: $bueLightColor;
+    }
+    
+}

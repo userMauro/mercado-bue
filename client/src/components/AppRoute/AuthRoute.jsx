@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 
 import { setUserData } from "../../redux/user.slice"
+import Nav from "../Nav/Nav"
 
 
 export default function AuthRoute() {
@@ -29,6 +30,7 @@ export default function AuthRoute() {
 
   return (
     <>
+        <Nav />
         <Outlet />
     </>
   )

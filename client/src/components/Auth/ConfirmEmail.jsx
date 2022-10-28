@@ -4,7 +4,7 @@ import axios from 'axios'
 
 // utils
 import URL from "../../utils/endpointURL"
-import NotFound from '../NotFound'
+import NotFound from '../NotFound/NotFound'
 import { regex } from '../../utils/regex'
 
 

@@ -1,0 +1,36 @@
+.Nav {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  background-color: #ffc401;
+}
+.Nav ul {
+  display: flex;
+  flex-direction: row;
+  list-style-type: none;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  width: 100%;
+  margin: 0;
+  gap: 5%;
+}
+.Nav li {
+  list-style: none;
+  margin: 0;
+  padding: 12px;
+}
+.Nav li img {
+  width: 35px;
+  height: 35px;
+}
+.Nav li img:hover {
+  scale: 1.2;
+}
+.Nav #link {
+  text-decoration: none;
+  color: rgb(77, 77, 77);
+}
+.Nav #link:hover {
+  color: rgb(255, 255, 255);
+}/*# sourceMappingURL=Nav.css.map */
