@@ -1,11 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import '../../styles/NotFound/NotFound.css'
 
 export default function NotFound () {
+
     return (
-        <div>
-            Not found 404
-            <Link to = '/'><button>Home</button></Link>
-        </div>
-    );
-};
+        <div className="NotFound"></div>
+    )
+}

@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 
 // utils
-import URL from "../../utils/endpointURL"
+import endpointURL from "../../utils/endpointURL"
 import NotFound from '../NotFound/NotFound'
 import { regex } from '../../utils/regex'
 
@@ -57,7 +57,7 @@ export default function ConfirmEmail () {
 
         if (action === "register") {
             try {
-                const {data } = await axios.get(`${URL}/auth/register/${credentials.email}`)
+                const {data } = await axios.get(`${endpointURL}/auth/register/${credentials.email}`)
                 setCredentials({
                     ...credentials,
                     token: data.msg,
@@ -71,7 +71,7 @@ export default function ConfirmEmail () {
             } 
         } else if (action === "recupass") {
             try {
-                const {data } = await axios.get(`${URL}/auth/resetPass/${credentials.email}`)
+                const {data } = await axios.get(`${endpointURL}/auth/resetPass/${credentials.email}`)
                 setCredentials({
                     ...credentials,
                     token: data.msg,
@@ -93,7 +93,7 @@ export default function ConfirmEmail () {
 
         try {
             const { email, code, token } = credentials
-            await axios.post(`${URL}/auth/confirm/code`, {email, code, token})
+            await axios.post(`${endpointURL}/auth/confirm/code`, {email, code, token})
             setIsLoading(false)
             setError('')
             setStep(3)
@@ -110,12 +110,12 @@ export default function ConfirmEmail () {
 
         try {
             const { username, password, email } = credentials // hashear password en front o back? como se resuelve?
-            await axios.post(`${URL}/auth/register/create`, {username, password, email})
+            await axios.post(`${endpointURL}/auth/register/create`, {username, password, email})
             setIsLoading(false)
             alert('Cuenta creada exitosamente, accede para terminar el registro')
             setError('')
             setCredentials('')
-            navigate('/login')
+            navigate('/auth/login')
         } catch (error) {
             setIsLoading(false)
             setError(error.response.data.msg)  
@@ -134,12 +134,12 @@ export default function ConfirmEmail () {
         setIsLoading(true)
 
         try {
-            await axios.put(`${URL}/auth/resetPass/confirm`, {password, email})
+            await axios.put(`${endpointURL}/auth/resetPass/confirm`, {password, email})
             alert('Contraseña modificada exitosamente')
             setError('')
             setCredentials('')
             setIsLoading(false)
-            navigate('/login')
+            navigate('/auth/login')
         } catch (error) {
             setIsLoading(false)
             setError(error.response.data.msg)  
@@ -153,7 +153,8 @@ export default function ConfirmEmail () {
     if (step === 1) return (
         <div className="Authenticate">
             <div className="authenticate-container">
-                <h1>Ingresa tu email</h1>
+                <h1>Enviar código</h1>
+                <h2>Ingresa tu email</h2>
                 <input required placeholder="ejemplo@mercadobue.com.ar" 
                     type="email" name="email" value={credentials.email} 
                     onChange={handleChange} spellCheck="false" 
@@ -171,7 +172,8 @@ export default function ConfirmEmail () {
     if (step === 2) return (
         <div className="Authenticate">
             <div className="authenticate-container">
-                <h1>Ingrese el código</h1>
+                <h1>Verificar</h1>
+                <h2>Ingrese el código</h2>
                 <input required type="text" name="code" value={credentials.code} onChange={handleChange} />
                 <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "20px"}}>
                     <button disabled id="btn-countdown" type="submit" onClick={() => checkEmail()}>0:00{/*count*/}</button>
@@ -188,7 +190,8 @@ export default function ConfirmEmail () {
         if (action === "register") return (
             <div className="Authenticate">
                 <div className="authenticate-container">
-                    <h1>Crea tu cuenta</h1>
+                    <h1 style={{ fontSize: "30px", marginBottom: "0px"}}>{credentials.email}</h1>
+                    <h2>Crea tu cuenta</h2>
                     <input required placeholder="Nombre de usuario" type="text" name="username" value={credentials.username} onChange={handleChange} />
                     <input required placeholder="Contraseña" type="password" name="password" value={credentials.password} onChange={handleChange} />
                     <input required placeholder="Repetir contraseña" type="password" name="password2" value={credentials.password2} onChange={handleChange} />
@@ -204,12 +207,13 @@ export default function ConfirmEmail () {
         if (action === "recupass") return (
             <div className="Authenticate">
                 <div className="authenticate-container">
-                    <h1>Ingrese la nueva contraseña</h1>
+                    <h1 style={{ fontSize: "30px", marginBottom: "0px"}}>{credentials.email}</h1>
+                    <h2>Ingrese la nueva contraseña</h2>
                     <input required placeholder="Nueva contraseña" type="password" name="password" value={credentials.password} onChange={handleChange} />
                     <input required placeholder="Repetir nueva contraseña" type="password" name="password2" value={credentials.password2} onChange={handleChange} />
                     <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "20px"}}>
                         <button type="submit" onClick={changePass}>CONFIRMAR</button>
-                        <Link id="links" to="/login"><button>CANCELAR</button></Link>
+                        <Link id="links" to="/auth/login"><button>CANCELAR</button></Link>
                     </div>
                     <span id="error">{error}</span>
                 </div>

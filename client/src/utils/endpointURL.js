@@ -1,2 +1,4 @@
-export default URL = "http://localhost:3001"    // local
-// export default URL = ""  // production
+const endpointURL = "http://localhost:3001"    // local
+// const endpointURL = ""    // production
+
+export default endpointURL

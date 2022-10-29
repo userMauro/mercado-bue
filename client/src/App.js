@@ -10,6 +10,7 @@ import Buy from "./components/Buy/Buy"
 import NotFound from "./components/NotFound/NotFound"
 import Sell from "./components/Sell/Sell"
 import Config from "./components/Config/Config.jsx"
+import Profile from "./components/Config/Profile"
 
 function App() {
 
@@ -18,8 +19,9 @@ function App() {
       <Routes>
         <Route path="/" element={<AuthRoute />}>
           <Route path="/" element={<Buy />}  />
-          <Route path="/sell" element= {<Sell />} />
-          <Route path="/config" element= {<Config />} />
+          <Route path="/sell" element={<Sell />} />
+          <Route path="/config" element={<Config />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
 
         <Route path="/auth" element={<NotLogRoute />}>

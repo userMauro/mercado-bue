@@ -1,0 +1,9 @@
+.NotFound {
+    width: 100vw;
+    height: 100vh;
+    background-image: url('../../assets/error-404.jpg');
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}

@@ -1,0 +1,33 @@
+.Config {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.Config h1 {
+  color: rgb(77, 77, 77);
+}
+.Config ul {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  align-items: center;
+  padding: 0;
+  gap: 1rem;
+}
+.Config li {
+  color: rgb(77, 77, 77);
+  cursor: pointer;
+}
+.Config .config-item {
+  width: 30%;
+  text-decoration: none;
+  list-style: none;
+  color: rgb(77, 77, 77);
+  background-color: #ffc401;
+  padding: 15px;
+  font-size: 20px;
+  border-radius: 10px;
+}
+.Config .config-item:hover {
+  color: white;
+}/*# sourceMappingURL=config.css.map */

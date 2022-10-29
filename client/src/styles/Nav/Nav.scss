@@ -15,7 +15,20 @@
         padding: 0;
         width: 100%;
         margin: 0;
-        gap: 5%;
+        gap: 2%;
+
+        input {
+            width: 20%;
+            padding: 10px 15px 10px 15px;
+            outline: none;
+            border-radius: 5px;
+            border: 1px solid $bueGray;
+        }
+
+        div {
+            display: flex;
+            flex-direction: row;
+        }
     }
 
     li {
@@ -24,8 +37,8 @@
         padding: 12px;
 
         img {
-            width: 35px;
-            height: 35px;
+            width: 30px;
+            height: 30px;
         }
 
         img:hover {
@@ -35,7 +48,7 @@
 
     #link {
         text-decoration: none;
-        color: rgb(77, 77, 77)
+        color: $bueGray;
     }
 
     #link:hover {
