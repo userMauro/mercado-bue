@@ -159,11 +159,11 @@ export default function ConfirmEmail () {
                     type="email" name="email" value={credentials.email} 
                     onChange={handleChange} spellCheck="false" 
                 />
+                <span id="error">{error}</span>
                 <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "20px"}}>
                     <button type="submit" onClick={(e) => checkEmail(e)}>CONFIRMAR</button>
                     <Link id="links" to="/auth/login"><button>CANCELAR</button></Link>
                 </div>
-                <span id="error">{error}</span>
             </div>
         </div>
     )
@@ -175,12 +175,12 @@ export default function ConfirmEmail () {
                 <h1>Verificar</h1>
                 <h2>Ingrese el código</h2>
                 <input required type="text" name="code" value={credentials.code} onChange={handleChange} />
+                <span id="error">{error}</span>
                 <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "20px"}}>
                     <button disabled id="btn-countdown" type="submit" onClick={() => checkEmail()}>0:00{/*count*/}</button>
                     <button id="btn-countdown" type="submit" onClick={(e) => checkCode(e)}>CONFIRMAR</button>
                     <Link id="links" to="/auth/login"><button>CANCELAR</button></Link>
                 </div>
-                <span id="error">{error}</span>
             </div>
         </div>
     )  
