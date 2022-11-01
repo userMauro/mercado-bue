@@ -1,8 +1,9 @@
 import React, { useEffect } from "react"
-import { Outlet, Route, useNavigate } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 
 import { setUserData } from "../../redux/user.slice"
+import Nav from "../Nav/Nav"
 
 
 export default function AuthRoute() {
@@ -23,10 +24,13 @@ export default function AuthRoute() {
         } else {
             navigate("/auth/login")
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
   return (
     <>
+        <Nav />
         <Outlet />
     </>
   )

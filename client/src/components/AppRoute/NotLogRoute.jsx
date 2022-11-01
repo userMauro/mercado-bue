@@ -22,6 +22,8 @@ export default function NotLogRoute() {
             }
             navigate("/")
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
   return (

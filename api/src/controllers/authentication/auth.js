@@ -62,7 +62,7 @@ const preRegister = async (req, res, next) => {
         if (exists) return res.status(401).json({status: false, msg: 'Email already exists'})
 
         // creo el código aleatorio
-        const code = uuidv4().slice(0, 6)
+        const code = uuidv4().slice(0, 6).toUpperCase()
 
         // creo un token
         const token = createToken({email, code}, "60s") // 60s
@@ -162,7 +162,7 @@ const requestPassForgot = async(req, res, next) => {
         if (!exists) return res.status(401).json({status: false, msg: 'Email not founded in database'})
 
         // creo el código aleatorio
-        const code = uuidv4().slice(0, 6)
+        const code = uuidv4().slice(0, 6).toUpperCase()
 
         // creo un token
         const token = createToken({email, code}, "60s")
