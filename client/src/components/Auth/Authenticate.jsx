@@ -78,7 +78,7 @@ export default function Authenticate () {
                     <button type="submit">INGRESAR</button>
                 </form>
                 <div className="authenticate-options">
-                    <Link id="links" to="/auth/confirm/email/recupass">¿Olvidaste la contraseña?</Link>
+                    <Link id="links" to="/auth/confirm/email/resetPass">¿Olvidaste la contraseña?</Link>
                     <Link id="links" to="/auth/confirm/email/register">Registrarse</Link>
                 </div>
             </div>

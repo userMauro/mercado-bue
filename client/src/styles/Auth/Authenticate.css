@@ -13,7 +13,7 @@
   cursor: default;
   margin: 0;
   font-size: 50px;
-  margin-bottom: -15px;
+  margin-bottom: -10px;
 }
 .Authenticate h2 {
   margin: 0;
@@ -89,4 +89,13 @@
 .authenticate-options {
   display: flex;
   flex-direction: column;
+}
+
+.authenticate-codes {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+.authenticate-codes input {
+  width: 30px;
 }/*# sourceMappingURL=Authenticate.css.map */
