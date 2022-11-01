@@ -33,8 +33,14 @@
         cursor: default;
     }
 
-    #loading {
-        color: $bueLightColor;
+    // #loading {
+    //     color: $bueLightColor;
+    //     font-size: 30px;
+    //     font-weight: lighter;
+    // }
+
+    #gif-loading {
+        margin-top: 20px;
     }
 
     button {
@@ -101,6 +107,11 @@
     gap: 5px;
 
     input {
-        width: 30px;
+        width: 20px;
+        height: 40px;
+        font-size: 25px;
+        color: darkgray;
+        border: 1px solid darkgray;
+        border-radius: 5px;
     }
 }
