@@ -7,17 +7,6 @@ import endpointURL from "../../utils/endpointURL"
 import NotFound from '../NotFound/NotFound'
 import { regex } from '../../utils/regex'
 
-// const [count, setCount] = useState(59)
-    
-    // const countDown = () => {
-    //     console.log(count)
-    //     while (count > 0) {
-    //         setCount(count - 1)
-    //         setTimeout(1000)
-    //         console.log(count)
-    //     }
-    //     alert('fin')
-    // }
 
 export default function ConfirmEmail () {
     const navigate = useNavigate()
@@ -30,13 +19,11 @@ export default function ConfirmEmail () {
 
     const [credentials, setCredentials] = useState({
         email: '',
-        // code: '',
         token: '',
         username: '',
         password: '',
         password2: ''
     })
-
 
     if (isLoading === true) return (
         <div className="Authenticate">
@@ -175,7 +162,7 @@ export default function ConfirmEmail () {
     if (step === 2) return (
         <div className="Authenticate">
             <div className="authenticate-container">
-                <h1>Verificar</h1>
+                <h1>Revisa tu email</h1>
                 <h2>Ingrese el código</h2>
                 {/* <input required type="text" name="code" value={credentials.code} onChange={handleChange} /> */}
                 <div className="authenticate-codes">
@@ -188,7 +175,7 @@ export default function ConfirmEmail () {
                 </div>
                 <span id="error">{error}</span>
                 <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "20px"}}>
-                    {/* <button disabled id="btn-countdown" type="submit" onClick={() => checkEmail()}>0:00count</button> */}
+                    {/* <button disabled id="btn-countdown" type="submit" onClick={() => checkEmail()}>0:${count}</button> */}
                     <Link id="links" to="/auth/login"><button>CANCELAR</button></Link>
                 </div>
             </div>
