@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import axios from 'axios'
 
 import endpointURL from "../../utils/endpointURL"
+import Loader from '../Loader/Loader';
 import "../../styles/Auth/Authenticate.css"
 import { regex } from '../../utils/regex'
 import { setUserData } from '../../redux/user.slice';
@@ -23,9 +24,7 @@ export default function Authenticate () {
     })
 
     if (isLoading === true) return (
-        <div className="Authenticate">
-            <h1 id="loading">Loading...</h1>
-        </div>
+        <Loader />
     )
 
     const handleChange = (e) => {

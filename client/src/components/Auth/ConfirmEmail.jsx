@@ -5,6 +5,7 @@ import axios from 'axios'
 // utils
 import endpointURL from "../../utils/endpointURL"
 import NotFound from '../NotFound/NotFound'
+import Loader from '../Loader/Loader'
 import { regex } from '../../utils/regex'
 
 
@@ -26,9 +27,7 @@ export default function ConfirmEmail () {
     })
 
     if (isLoading === true) return (
-        <div className="Authenticate">
-            <h1 id="loading">Loading...</h1>
-        </div>
+        <Loader />
     )
 
     const handleChange = (e) => {
