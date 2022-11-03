@@ -104,10 +104,8 @@ export default function ConfirmEmail () {
             const { username, password, email } = credentials // hashear password en front o back? como se resuelve?
             await axios.post(`${endpointURL}/auth/register/create`, {username, password, email})
             setIsLoading(false)
-            alert('Cuenta creada exitosamente, accede para terminar el registro')
             setError('')
-            setCredentials('')
-            navigate('/auth/login')
+            setStep(4)
         } catch (error) {
             setIsLoading(false)
             setError(error.response.data.msg)  
@@ -124,15 +122,18 @@ export default function ConfirmEmail () {
 
         try {
             await axios.put(`${endpointURL}/auth/resetPass/confirm`, {password, email})
-            alert('Contraseña modificada exitosamente')
-            setError('')
-            setCredentials('')
             setIsLoading(false)
-            navigate('/auth/login')
+            setError('')
+            setStep(4)
         } catch (error) {
             setIsLoading(false)
             setError(error.response.data.msg)  
         }
+    }
+
+    const toAuth = () => {
+        setCredentials('')
+        navigate('/auth/login')
     }
 
     // step 0: not fount 404
@@ -192,7 +193,7 @@ export default function ConfirmEmail () {
                     <input required placeholder="Contraseña" type="password" name="password" value={credentials.password} onChange={handleChange} />
                     <input required placeholder="Repetir contraseña" type="password" name="password2" value={credentials.password2} onChange={handleChange} />
                     <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "20px"}}>
-                        <button type="submit" onClick={(e) => createAccount(e)}>CONFIRMAR</button>
+                        <button type="submit" onClick={createAccount}>CONFIRMAR</button>
                         <Link id="links" to="/auth/login"><button>CANCELAR</button></Link>
                     </div>
                     <span id="error">{error}</span>
@@ -216,4 +217,16 @@ export default function ConfirmEmail () {
             </div> 
         )
     }
+
+    // step 4: mensaje final
+    if (step === 4) return (
+        <div className="Authenticate">
+            <div className="authenticate-container">
+                <h1 style={{ fontSize: "30px", marginBottom: "0px"}}>{credentials.email}</h1>
+                {(action === "register") && (<h2>¡Cuenta creada con éxito!</h2>)} 
+                {(action === "resetPass") && (<h2>¡Contraseña modificada con éxito!</h2>)} 
+                <button type="submit" onClick={toAuth}>REGRESAR</button>
+            </div>
+        </div>  
+    )
 }

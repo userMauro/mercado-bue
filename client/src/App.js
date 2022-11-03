@@ -10,7 +10,7 @@ import Buy from "./components/Buy/Buy"
 import NotFound from "./components/NotFound/NotFound"
 import Sell from "./components/Sell/Sell"
 import Config from "./components/Config/Config.jsx"
-import Profile from "./components/Config/Profile"
+import Profile from "./components/Config/Profile" 
 
 function App() {
 
