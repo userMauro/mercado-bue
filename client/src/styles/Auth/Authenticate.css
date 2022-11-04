@@ -95,12 +95,13 @@
   display: flex;
   flex-direction: row;
   gap: 5px;
+  color: black;
 }
 .authenticate-codes input {
   width: 20px;
   height: 40px;
   font-size: 25px;
-  color: darkgray;
+  color: black;
   border: 1px solid darkgray;
   border-radius: 5px;
 }/*# sourceMappingURL=Authenticate.css.map */
