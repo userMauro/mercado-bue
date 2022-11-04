@@ -1,6 +1,6 @@
 @import "../Vars/vars.scss";
 
-.Config {
+.Menu {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -24,7 +24,7 @@
         cursor: pointer;
     }
 
-    .config-item {
+    .menu-item {
         width: 30%;
         text-decoration: none;
         list-style: none;
@@ -35,7 +35,7 @@
         border-radius: 10px;
     }
 
-    .config-item:hover {
+    .menu-item:hover {
         color: white;
     }
 }

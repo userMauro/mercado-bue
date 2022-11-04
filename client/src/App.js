@@ -2,15 +2,19 @@ import React from "react"
 import { Route, Routes } from "react-router-dom"
 
 import './App.css'
+
+// routes
 import AuthRoute from "./components/AppRoute/AuthRoute"
 import NotLogRoute from "./components/AppRoute/NotLogRoute"
+import NotFound from "./components/NotFound/NotFound"
+
 import Authenticate from "./components/Auth/Authenticate"
 import ConfirmEmail from "./components/Auth/ConfirmEmail"
+
 import Buy from "./components/Buy/Buy"
-import NotFound from "./components/NotFound/NotFound"
 import Sell from "./components/Sell/Sell"
-import Config from "./components/Config/Config.jsx"
-import Profile from "./components/Config/Profile" 
+import Settings from "./components/Settings/Menu"
+import Profile from "./components/Settings/Profile" 
 
 function App() {
 
@@ -20,7 +24,7 @@ function App() {
         <Route path="/" element={<AuthRoute />}>
           <Route path="/" element={<Buy />}  />
           <Route path="/sell" element={<Sell />} />
-          <Route path="/config" element={<Config />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="/profile" element={<Profile />} />
         </Route>
 
