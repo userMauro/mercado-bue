@@ -1,9 +1,12 @@
 import React from 'react';
-import '../../styles/NotFound/NotFound.css'
+
+// utils
+const notFound = require('../../assets/error-404.jpg')
 
 export default function NotFound () {
-
     return (
-        <div className="NotFound"></div>
+        <div class="w-screen h-screen">
+            <img class="w-screen h-screen" src={notFound} alt="notFound" />
+        </div>
     )
 }

@@ -1,8 +1,6 @@
 import React from "react"
 import { Route, Routes } from "react-router-dom"
 
-import './App.css'
-
 // routes
 import AuthRoute from "./components/AppRoute/AuthRoute"
 import NotLogRoute from "./components/AppRoute/NotLogRoute"
@@ -16,10 +14,10 @@ import Sell from "./components/Sell/Sell"
 import Settings from "./components/Settings/Menu"
 import Profile from "./components/Settings/Profile" 
 
-function App() {
+export default function App() {
 
   return (
-    <div className="App">
+    <div class="text-center">
       <Routes>
         <Route path="/" element={<AuthRoute />}>
           <Route path="/" element={<Buy />}  />
@@ -36,7 +34,5 @@ function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
-  );
+  )
 }
-
-export default App;
