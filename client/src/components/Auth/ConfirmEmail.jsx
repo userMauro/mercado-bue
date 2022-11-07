@@ -141,18 +141,31 @@ export default function ConfirmEmail () {
 
     // step 1: confirmar email
     if (step === 1) return (
-        <div className="Authenticate">
-            <div className="authenticate-container">
-                <h1>Enviar código</h1>
-                <h2>Ingresa tu email</h2>
-                <input required placeholder="ejemplo@mercadobue.com.ar" 
-                    type="email" name="email" value={credentials.email} 
-                    onChange={handleChange} spellCheck="false" 
+        <div class="flex flex-col w-screen h-screen justify-center items-center bg-yellow-400">
+            <div class="flex flex-col w-2/5 h-4/6 justify-center rounded-md shadow-xl bg-white">
+                <h1 class="text-5xl font-semibold text-yellow-400">Enviar código</h1>
+                <h2 class="text-2xl font-extralight mb-10 text-gray-400">Ingresa tu email</h2>
+                <input required 
+                    class="pt-2 pb-2 w-full text-center outline-none rounded-md text-gray-400 bg-gray-100"
+                    placeholder="ejemplo@mercadobue.com.ar" 
+                    type="email" 
+                    name="email" 
+                    value={credentials.email} 
+                    onChange={handleChange} 
+                    spellCheck="false" 
                 />
-                <span id="error">{error}</span>
-                <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "20px"}}>
-                    <button type="submit" onClick={(e) => checkEmail(e)}>CONFIRMAR</button>
-                    <Link id="links" to="/auth/login"><button>CANCELAR</button></Link>
+                <span id="error" class="text-sm text-red-500">{error}</span>
+                <div class="flex flex-row justify-center mt-7 gap-4">
+                    <button 
+                        class="w-40 h-14 mb-2 text-lg text-shadow rounded-md text-white drop-shadow-md bg-yellow-400" 
+                        type="submit" 
+                        onClick={(e) => checkEmail(e)}> CONFIRMAR
+                    </button>
+                    <Link to="/auth/login">
+                        <button class="w-40 h-14 mb-2 text-lg text-shadow rounded-md text-white drop-shadow-md bg-yellow-400" >
+                            CANCELAR
+                        </button>
+                    </Link>
                 </div>
             </div>
         </div>
@@ -160,24 +173,25 @@ export default function ConfirmEmail () {
 
     // step 2: confirmar code
     if (step === 2) return (
-        <div className="Authenticate">
-            <div className="authenticate-container">
-                <h1>Revisa tu email</h1>
-                <h2>Ingrese el código</h2>
-                {/* <input required type="text" name="code" value={credentials.code} onChange={handleChange} /> */}
-                <div className="authenticate-codes">
-                    <input type="text" id="code1" value={codes[1]} onChange={handleCode} maxLength="1" autoFocus />
-                    <input type="text" id="code2" value={codes[2]} onChange={handleCode} maxLength="1" />
-                    <input type="text" id="code3" value={codes[3]} onChange={handleCode} maxLength="1" />
-                    <input type="text" id="code4" value={codes[4]} onChange={handleCode} maxLength="1" />
-                    <input type="text" id="code5" value={codes[5]} onChange={handleCode} maxLength="1" />
-                    <input type="text" id="code6" value={codes[6]} onChange={handleCode} maxLength="1" />
+        <div class="flex flex-col w-screen h-screen justify-center items-center bg-yellow-400">
+            <div class="flex flex-col w-2/5 h-4/6 justify-center rounded-md shadow-xl bg-white">
+                <h1 class="text-5xl font-semibold text-yellow-400">Revisa tu email</h1>
+                <h2 class="text-2xl font-extralight mb-10 text-gray-400">Ingrese el código</h2>
+                <div class="flex flex-row justify-center gap-4 mb-4">
+                    <input class="w-11 h-12 text-2xl text-center rounded-md outline-none text-gray-400 border-gray-400 bg-gray-100" type="text" id="code1" value={codes[1]} onChange={handleCode} maxLength="1" autoFocus />
+                    <input class="w-11 h-12 text-2xl text-center rounded-md outline-none text-gray-400 border-gray-400 bg-gray-100" type="text" id="code2" value={codes[2]} onChange={handleCode} maxLength="1" />
+                    <input class="w-11 h-12 text-2xl text-center rounded-md outline-none text-gray-400 border-gray-400 bg-gray-100" type="text" id="code3" value={codes[3]} onChange={handleCode} maxLength="1" />
+                    <input class="w-11 h-12 text-2xl text-center rounded-md outline-none text-gray-400 border-gray-400 bg-gray-100" type="text" id="code4" value={codes[4]} onChange={handleCode} maxLength="1" />
+                    <input class="w-11 h-12 text-2xl text-center rounded-md outline-none text-gray-400 border-gray-400 bg-gray-100" type="text" id="code5" value={codes[5]} onChange={handleCode} maxLength="1" />
+                    <input class="w-11 h-12 text-2xl text-center rounded-md outline-none text-gray-400 border-gray-400 bg-gray-100" type="text" id="code6" value={codes[6]} onChange={handleCode} maxLength="1" />
                 </div>
-                <span id="error">{error}</span>
-                <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "20px"}}>
-                    {/* <button disabled id="btn-countdown" type="submit" onClick={() => checkEmail()}>0:${count}</button> */}
-                    <Link id="links" to="/auth/login"><button>CANCELAR</button></Link>
-                </div>
+                <span id="error" class="text-sm text-red-500 mb-4">{error}</span>
+                <Link to="/auth/login">
+                    <button class="w-40 h-14 mb-2 text-lg text-shadow rounded-md text-white drop-shadow-md bg-yellow-400">
+                        CANCELAR
+                    </button>
+                </Link>
+
             </div>
         </div>
     )  
@@ -185,34 +199,85 @@ export default function ConfirmEmail () {
     // step 3: crear cuenta con username y pass / crear contraseña nueva
     if (step === 3) {
         if (action === "register") return (
-            <div className="Authenticate">
-                <div className="authenticate-container">
-                    <h1 style={{ fontSize: "30px", marginBottom: "0px"}}>{credentials.email}</h1>
-                    <h2>Crea tu cuenta</h2>
-                    <input required placeholder="Nombre de usuario" type="text" name="username" value={credentials.username} onChange={handleChange} />
-                    <input required placeholder="Contraseña" type="password" name="password" value={credentials.password} onChange={handleChange} />
-                    <input required placeholder="Repetir contraseña" type="password" name="password2" value={credentials.password2} onChange={handleChange} />
-                    <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "20px"}}>
-                        <button type="submit" onClick={createAccount}>CONFIRMAR</button>
-                        <Link id="links" to="/auth/login"><button>CANCELAR</button></Link>
+            <div class="flex flex-col w-screen h-screen justify-center items-center bg-yellow-400">
+                <div class="flex flex-col w-2/5 h-4/6 justify-center rounded-md shadow-xl bg-white">
+                    <h1 class="text-4xl font-semibold text-yellow-400">{credentials.email}</h1>
+                    <h2 class="text-2xl font-extralight mb-5 text-gray-400">Crea tu cuenta</h2>
+                    <input required 
+                        class="pt-2 pb-2 mb-2 w-full text-center outline-none rounded-md text-gray-400 bg-gray-100"
+                        placeholder="Nombre de usuario" 
+                        type="text" 
+                        name="username" 
+                        value={credentials.username} 
+                        onChange={handleChange} 
+                    />
+                    <input required 
+                        class="pt-2 pb-2 mb-2 w-full text-center outline-none rounded-md text-gray-400 bg-gray-100"
+                        placeholder="Contraseña" 
+                        type="password" 
+                        name="password" 
+                        value={credentials.password} 
+                        onChange={handleChange} 
+                    />
+                    <input required 
+                        class="pt-2 pb-2 mb-2 w-full text-center outline-none rounded-md text-gray-400 bg-gray-100"
+                        placeholder="Repetir contraseña" 
+                        type="password" 
+                        name="password2" 
+                        value={credentials.password2} 
+                        onChange={handleChange} 
+                    />
+                    <span id="error" class="text-sm text-red-500 mb-4">{error}</span>
+                    <div class="flex flex-row justify-center mt-7 gap-4">
+                        <button 
+                            class="w-40 h-14 mb-2 text-lg text-shadow rounded-md text-white drop-shadow-md bg-yellow-400" 
+                            type="submit" 
+                            onClick={createAccount}> CONFIRMAR
+                        </button>
+                        <Link to="/auth/login">
+                            <button class="w-40 h-14 mb-2 text-lg text-shadow rounded-md text-white drop-shadow-md bg-yellow-400" >
+                                CANCELAR
+                            </button>
+                        </Link>
                     </div>
-                    <span id="error">{error}</span>
                 </div>
             </div>   
         )
 
         if (action === "resetPass") return (
-            <div className="Authenticate">
-                <div className="authenticate-container">
-                    <h1 style={{ fontSize: "30px", marginBottom: "0px"}}>{credentials.email}</h1>
-                    <h2>Ingrese la nueva contraseña</h2>
-                    <input required placeholder="Nueva contraseña" type="password" name="password" value={credentials.password} onChange={handleChange} />
-                    <input required placeholder="Repetir nueva contraseña" type="password" name="password2" value={credentials.password2} onChange={handleChange} />
-                    <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "20px"}}>
-                        <button type="submit" onClick={changePass}>CONFIRMAR</button>
-                        <Link id="links" to="/auth/login"><button>CANCELAR</button></Link>
+            <div class="flex flex-col w-screen h-screen justify-center items-center bg-yellow-400">
+                <div class="flex flex-col w-2/5 h-4/6 justify-center rounded-md shadow-xl bg-white">
+                    <h1 class="text-4xl font-semibold text-yellow-400">{credentials.email}</h1>
+                    <h2 class="text-2xl font-extralight mb-10 text-gray-400">Ingrese la nueva contraseña</h2>
+                    <input required 
+                        class="pt-2 pb-2 mb-2 w-full text-center outline-none rounded-md text-gray-400 bg-gray-100"
+                        placeholder="Nueva contraseña" 
+                        type="password" 
+                        name="password" 
+                        value={credentials.password} 
+                        onChange={handleChange} 
+                    />
+                    <input required 
+                        class="pt-2 pb-2 w-full text-center outline-none rounded-md text-gray-400 bg-gray-100"
+                        placeholder="Repetir nueva contraseña" 
+                        type="password" 
+                        name="password2" 
+                        value={credentials.password2} 
+                        onChange={handleChange} 
+                    />
+                    <span id="error" class="text-sm text-red-500 mb-4">{error}</span>
+                    <div class="flex flex-row justify-center mt-7 gap-4">
+                        <button 
+                            class="w-40 h-14 mb-2 text-lg text-shadow rounded-md text-white drop-shadow-md bg-yellow-400" 
+                            type="submit" 
+                            onClick={changePass}> CONFIRMAR
+                        </button>
+                        <Link to="/auth/login">
+                            <button class="w-40 h-14 mb-2 text-lg text-shadow rounded-md text-white drop-shadow-md bg-yellow-400" >
+                                CANCELAR
+                            </button>
+                        </Link>
                     </div>
-                    <span id="error">{error}</span>
                 </div>
             </div> 
         )
@@ -220,12 +285,14 @@ export default function ConfirmEmail () {
 
     // step 4: mensaje final
     if (step === 4) return (
-        <div className="Authenticate">
-            <div className="authenticate-container">
-                <h1 style={{ fontSize: "30px", marginBottom: "0px"}}>{credentials.email}</h1>
-                {(action === "register") && (<h2>¡Cuenta creada con éxito!</h2>)} 
-                {(action === "resetPass") && (<h2>¡Contraseña modificada con éxito!</h2>)} 
-                <button type="submit" onClick={toAuth}>REGRESAR</button>
+        <div class="flex flex-col w-screen h-screen justify-center items-center bg-yellow-400">
+            <div class="flex flex-col w-2/5 h-4/6 justify-center items-center rounded-md shadow-xl bg-white">
+                <h1 class="text-4xl font-semibold text-yellow-400">{credentials.email}</h1>
+                {(action === "register") && (<h2 class="text-2xl font-extralight mb-10 text-gray-400">¡Cuenta creada con éxito!</h2>)} 
+                {(action === "resetPass") && (<h2 class="text-2xl font-extralight mb-10 text-gray-400">¡Contraseña modificada con éxito!</h2>)} 
+                <button class="w-40 h-14 mb-2 text-lg text-shadow rounded-md text-white drop-shadow-md bg-yellow-400" type="submit" onClick={toAuth}>
+                    REGRESAR
+                </button>
             </div>
         </div>  
     )

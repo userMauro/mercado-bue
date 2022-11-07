@@ -5,7 +5,6 @@ import axios from 'axios'
 
 import endpointURL from "../../utils/endpointURL"
 import Loader from '../Loader/Loader';
-import "../../styles/Auth/Authenticate.css"
 import { regex } from '../../utils/regex'
 import { setUserData } from '../../redux/user.slice';
 
@@ -66,19 +65,40 @@ export default function Authenticate () {
     }
 
     return (
-        <div className="Authenticate">
-            <div className="authenticate-container">
-                <h1>Mercado Bue!</h1>
-                <h2>Ingresa a tu cuenta</h2>
-                <form action="" onSubmit={(e) => login(e)} className="authenticate-form">
-                    <input required placeholder="ejemplo@mercadobue.com.ar" type="email" name="email" value={credentials.email} onChange={handleChange} spellCheck="false" />
-                    <input required placeholder="******" type="password" name="password" value={credentials.password} onChange={handleChange} />
-                    <div id="error">{error}</div>
-                    <button type="submit">INGRESAR</button>
+        <div class="flex flex-col w-screen h-screen justify-center items-center bg-yellow-400">
+            <div class="flex flex-col w-2/5 h-4/6 justify-center rounded-md shadow-xl bg-white">
+                <h1 class="text-5xl font-semibold text-yellow-400">Mercado Bue!</h1>
+                <h2 class="text-2xl font-extralight mb-10 text-gray-400">Ingresa a tu cuenta</h2>
+                <form class="flex flex-col items-center gap-2" action="" onSubmit={(e) => login(e)}>
+                    <input required 
+                        class="pt-2 pb-2 w-full text-center outline-none rounded-md text-gray-400 bg-gray-100"
+                        placeholder="ejemplo@mercadobue.com.ar" 
+                        type="email" 
+                        name="email" 
+                        value={credentials.email} 
+                        onChange={handleChange} 
+                        spellCheck="false" 
+                    />
+                    <input required 
+                        class="pt-2 pb-2 w-full text-center outline-none rounded-md text-gray-400 bg-gray-100"
+                        placeholder="******" 
+                        type="password" 
+                        name="password" 
+                        value={credentials.password} 
+                        onChange={handleChange} 
+                    />
+                    <div id="error" class="text-sm text-red-500">{error}</div>
+                    <button class="w-40 h-14 mb-2 text-lg text-shadow rounded-md text-white drop-shadow-md bg-yellow-400" type="submit">
+                        INGRESAR
+                    </button>
                 </form>
-                <div className="authenticate-options">
-                    <Link id="links" to="/auth/confirm/email/resetPass">¿Olvidaste la contraseña?</Link>
-                    <Link id="links" to="/auth/confirm/email/register">Registrarse</Link>
+                <div class="flex flex-col">
+                    <Link class="m-auto text-sm text-gray-400 hover:text-yellow-400" to="/auth/confirm/email/resetPass">
+                        ¿Olvidaste la contraseña?
+                    </Link>
+                    <Link class="m-auto text-sm text-gray-400 hover:text-yellow-400" to="/auth/confirm/email/register">
+                        Registrarse
+                    </Link>
                 </div>
             </div>
         </div>

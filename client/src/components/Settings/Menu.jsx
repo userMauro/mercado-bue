@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 
-import "../../styles/Settings/Menu.css"
+// utils
 import { signOut } from '../../redux/user.slice'
 
 
@@ -25,15 +25,14 @@ export default function Menu () {
     }
 
     return (
-        <div className="Menu">
-
+        <div>
             <h1>{username}</h1>
 
             <ul>
-                <Link className="menu-item" to="/profile"><li>Perfil</li></Link>
-                <Link className="menu-item" to="/menu"><li>Opcion 2</li></Link>
-                <Link className="menu-item" to="/menu"><li>Opcion 3</li></Link>
-                <li onClick={() => logOut()}>Desloguear</li>
+                <Link to="/profile"><li>Perfil</li></Link>
+                <Link to="/menu"><li>Opcion 2</li></Link>
+                <Link to="/menu"><li>Opcion 3</li></Link>
+                <li onClick={logOut}>Desloguear</li>
             </ul>
         </div>
     )
