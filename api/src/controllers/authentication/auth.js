@@ -26,7 +26,6 @@ const authOK = (req, res, next) => {
         };
 
         next()
-        // return res.status(200).json({status: true, msg: 'Credentials are ok'})
     } catch (error) {
         next(error);
     };
@@ -95,6 +94,11 @@ const register = async (req, res, next) => {
             email,
             passwordHash,
             role: 'user',
+            name: '',
+            cel: '',
+            dni: '',
+            location: '',
+            province: '',
             products: [],
             favorites: [],
             reports: [],

@@ -6,13 +6,11 @@ const userSchema = new mongoose.Schema({
     email:              { type: String, required: true, unique: true },
     passwordHash:       { type: String, required: true },
     role:               { type: String, required: true },   // role (admin/user/banned)
-    dni:                { type: Number },
-    firstname:          { type: String },
-    lastname:           { type: String },
-    birthday:           { type: String },
-    phone:              { type: String },
-    location:           { type: Object },                   // country {country: , city: , state: }
-    address:            { type: Object },                   // address {street address: , floor: , department: , zip code: }
+    name:               { type: String },
+    dni:                { type: String },
+    cel:                { type: String },
+    province:           { type: String },
+    location:           { type: String },
     products:           { type: Array },                    // [ products (status: in sale, sold, paused) ]
     reports:            { type: Array },                    // users can report others { gravity: 1-5, description: 'bla', username: 'user' }
     favorites:          [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
