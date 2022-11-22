@@ -11,7 +11,6 @@ import ConfirmEmail from "./components/Auth/ConfirmEmail"
 
 import Buy from "./components/Buy/Buy"
 import Sell from "./components/Sell/Sell"
-import Settings from "./components/Settings/Menu"
 import Profile from "./components/Settings/Profile" 
 
 export default function App() {
@@ -22,7 +21,6 @@ export default function App() {
         <Route path="/" element={<AuthRoute />}>
           <Route path="/" element={<Buy />}  />
           <Route path="/sell" element={<Sell />} />
-          <Route path="/settings" element={<Settings />} />
           <Route path="/profile" element={<Profile />} />
         </Route>
 
